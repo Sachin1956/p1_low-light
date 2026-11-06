@@ -515,7 +515,7 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     parser.add_argument(
         "--usns",
         type=str,
-        default="1RV23CS001, 1RV23CS002, 1RV23CS003, 1RV23CS004",
+        default="1RUA24CSE0375, 1RUA24CSE0376, 1RUA24CSE0384, 1RUA24CSE0395",
         help="Comma-separated team USNs placed strictly on Line 1 of the evaluation file.",
     )
     parser.add_argument(

@@ -101,7 +101,12 @@ def generate_eval_markdown_file(
     """
     cleaned_usns = [u.strip() for u in usns if u and u.strip()]
     if not cleaned_usns:
-        cleaned_usns = ["1RV23CS001", "1RV23CS002", "1RV23CS003", "1RV23CS004"]
+        cleaned_usns = [
+            "1RUA24CSE0375",
+            "1RUA24CSE0376",
+            "1RUA24CSE0384",
+            "1RUA24CSE0395",
+        ]
     first_line = ", ".join(cleaned_usns)
 
     hw = comparative_results[0].hardware if comparative_results else "CPU"
@@ -113,6 +118,14 @@ def generate_eval_markdown_file(
         first_line,
         "",
         f"# Comparative Evaluation Results — Problem Statement 1 (`eval_P1_{team_id}`)",
+        "",
+        "## Team Members",
+        "| Name | USN |",
+        "|---|---|",
+        "| Rohit Ajit Bharadwaj | `1RUA24CSE0375` |",
+        "| Rohith P Hegde | `1RUA24CSE0376` |",
+        "| S Sachithananthan | `1RUA24CSE0384` |",
+        "| Saket M | `1RUA24CSE0395` |",
         "",
         "## Evaluation Protocol & Environment",
         f"- **Problem ID:** P1 — Robust Low-Light Image Restoration and Enhancement",

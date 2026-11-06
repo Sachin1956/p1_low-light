@@ -1,6 +1,14 @@
-1RV23CS001, 1RV23CS002, 1RV23CS003, 1RV23CS004
+1RUA24CSE0375, 1RUA24CSE0376, 1RUA24CSE0384, 1RUA24CSE0395
 
 # Comparative Evaluation Results — Problem Statement 1 (`eval_P1_T01`)
+
+## Team Members
+| Name | USN |
+|---|---|
+| Rohit Ajit Bharadwaj | `1RUA24CSE0375` |
+| Rohith P Hegde | `1RUA24CSE0376` |
+| S Sachithananthan | `1RUA24CSE0384` |
+| Saket M | `1RUA24CSE0395` |
 
 ## Evaluation Protocol & Environment
 - **Problem ID:** P1 — Robust Low-Light Image Restoration and Enhancement

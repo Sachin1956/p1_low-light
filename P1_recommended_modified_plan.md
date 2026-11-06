@@ -235,7 +235,7 @@ To satisfy the P1 specification (Page 2) and the Instruction Sheet rubric (Page 
 
 Per Page 15 of the Hackathon PDF, the repository **must** include an evaluation file named `eval_P1_T<TeamID>.md` (e.g., `eval_P1_T01.md`):
 
-- **Line 1 MUST be:** All team members' USNs separated by commas (e.g., `1RV23CS001, 1RV23CS002, 1RV23CS003, 1RV23CS004`).
+- **Line 1 MUST be:** All team members' USNs separated by commas (`1RUA24CSE0375, 1RUA24CSE0376, 1RUA24CSE0384, 1RUA24CSE0395`).
 - **Subsequent sections:** Comparative evaluation tables for Classical-only, Deep-Learning-only, and Hybrid approaches with metrics in the exact order shown in Section 8.2, along with dataset split and hardware specifications.
 
 ### 8.4 Ablation study

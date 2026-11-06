@@ -128,3 +128,7 @@ In accordance with the hackathon specification (evaluated in strict order):
 ## ⚖️ Ethics & Responsible AI Considerations
 * **Restoration vs. Hallucination**: Our non-generative hybrid approach (Retinex + HVI-CIDNet + deterministic spatial fusion) enhances authentic sensor signals rather than hallucinating artificial textures or features, ensuring suitability for forensic, security, and scientific applications.
 * **Privacy**: Uploaded images are processed strictly in-memory during interactive inference and are never stored on public servers.
+
+## Dataset protocol
+
+The original P1 benchmark collection and the later supplementary dataset are maintained as **separate datasets**. See [`DATASETS_AND_SPLITS.md`](DATASETS_AND_SPLITS.md) for the original benchmark protocol, [`SUPPLEMENTARY_DATASET_RESEARCH.md`](SUPPLEMENTARY_DATASET_RESEARCH.md) for the supplemental SMALL dataset decision and its separate evaluation rules, and [`DATA_SHARING.md`](DATA_SHARING.md) for Drive storage/sharing instructions. The downloaded images remain outside this Git repository; only code, documentation, and manifests belong here.

@@ -2,7 +2,7 @@
 
 Applies to Gemini (including the model the team calls Gemini 3.8 Flash), other coding agents and human edits. The model label is user-supplied, not a verified model release. Read `P1_ML_EXECUTION_PLAN.md` before implementing, training, benchmarking, changing metrics or preparing submission claims.
 
-Branch assignment is explicit: project owner and their agents own Part A classical CV; teammate and their agents own Part B deep learning on Kaggle; a named integrator owns Part C and the shared evaluator. Do not modify another owner's branch without an agreed handoff. Each branch exports the interface, five shared images and provenance specified in the plan. Model agents on Agy/Claude/Gemini must report branch status separately; completion of Part A never implies Part B training is complete.
+Branch assignment is explicit: project owner and their agents own Part A classical CV, Part C integration and the shared evaluator; teammate and their agents own Part B deep learning on Kaggle, then the app/deployment after the H+4 handoff. Record actual names at H0. Do not modify another owner's branch without an agreed handoff. Each branch exports the interface, five shared images and provenance specified in the plan. Model agents on Agy/Claude/Gemini must report branch status separately; completion of Part A never implies Part B training is complete.
 
 These instructions reduce shortcut risk; they are not a security boundary. A person or independent review process must verify evidence. An agent with write access to both implementation and checks can falsify both. Run sealed evaluation with references inaccessible to inference, and retain trusted manifests/checks outside the implementing agent's writable area where practical.
 

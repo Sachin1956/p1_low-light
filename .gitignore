@@ -14,7 +14,8 @@ dist/
 *.egg-info/
 
 # Datasets & large checkpoints (keep out of git unless explicitly tracked)
-data/
+data/*
+!data/handoff_fixtures/
 datasets/
 checkpoints/*.pth
 checkpoints/*.pt

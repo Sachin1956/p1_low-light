@@ -99,6 +99,16 @@ def reference_classical_branch(low_rgb: np.ndarray, adaptive: bool = True) -> np
     refinement + luminance CLAHE + bilateral denoising + adaptive gamma & WB).
     Used when evaluating on-the-fly or running `--self-test`.
     """
+    try:
+        import classical
+        from classical.config import ClassicalConfig, PipelineMode
+        u8_input = np.clip(to_float_rgb(low_rgb) * 255.0, 0, 255).astype(np.uint8)
+        mode = PipelineMode.E2_ADAPTIVE if adaptive else PipelineMode.E1_FIXED
+        cfg = ClassicalConfig(mode=mode)
+        res = classical.enhance(u8_input, cfg)
+        return res.image.astype(np.float32) / 255.0
+    except ImportError:
+        pass
     img = to_float_rgb(low_rgb)
     lum = 0.299 * img[:, :, 0] + 0.587 * img[:, :, 1] + 0.114 * img[:, :, 2]
 

@@ -1,0 +1,18 @@
+{
+  "id": "ssachithananthan/p1-hvi-cidnet-training-t4-x2",
+  "title": "p1-hvi-cidnet-training-t4-x2",
+  "code_file": "train_kaggle.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [
+    "milan400/cidnet-weights",
+    "tanhyml/lol-v2-dataset",
+    "ssachithananthan/p1-drive-datasets"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

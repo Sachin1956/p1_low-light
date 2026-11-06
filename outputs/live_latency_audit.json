@@ -1,0 +1,134 @@
+{
+  "total_images": 20,
+  "successful_images": 20,
+  "zero_crashes": true,
+  "zero_oom": true,
+  "all_under_10s": true,
+  "min_latency_ms": 3433.8,
+  "mean_latency_ms": 4756.5,
+  "median_latency_ms": 4305.1,
+  "p95_latency_ms": 6506.6,
+  "max_latency_ms": 8358.7,
+  "records": [
+    {
+      "image_idx": 1,
+      "resolution": "600x400",
+      "latency_ms": 4000.97,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 2,
+      "resolution": "512x512",
+      "latency_ms": 4740.53,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 3,
+      "resolution": "640x480",
+      "latency_ms": 5703.29,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 4,
+      "resolution": "768x576",
+      "latency_ms": 8358.69,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 5,
+      "resolution": "450x600",
+      "latency_ms": 4666.08,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 6,
+      "resolution": "600x400",
+      "latency_ms": 3433.82,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 7,
+      "resolution": "512x512",
+      "latency_ms": 4059.77,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 8,
+      "resolution": "640x480",
+      "latency_ms": 4302.0,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 9,
+      "resolution": "768x576",
+      "latency_ms": 5819.24,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 10,
+      "resolution": "450x600",
+      "latency_ms": 5490.66,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 11,
+      "resolution": "600x400",
+      "latency_ms": 4308.19,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 12,
+      "resolution": "512x512",
+      "latency_ms": 3880.49,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 13,
+      "resolution": "640x480",
+      "latency_ms": 4312.24,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 14,
+      "resolution": "768x576",
+      "latency_ms": 6409.16,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 15,
+      "resolution": "450x600",
+      "latency_ms": 4154.36,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 16,
+      "resolution": "600x400",
+      "latency_ms": 3518.05,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 17,
+      "resolution": "512x512",
+      "latency_ms": 3873.92,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 18,
+      "resolution": "640x480",
+      "latency_ms": 4089.66,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 19,
+      "resolution": "768x576",
+      "latency_ms": 5963.03,
+      "pass_10s_gate": true
+    },
+    {
+      "image_idx": 20,
+      "resolution": "450x600",
+      "latency_ms": 4045.69,
+      "pass_10s_gate": true
+    }
+  ]
+}

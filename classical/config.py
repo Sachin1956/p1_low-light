@@ -54,7 +54,7 @@ class ClassicalConfig:
 
     # Color & contrast correction
     enable_color_correction: bool = True
-    saturation_factor: float = 1.10
+    saturation_factor: float = 1.00
 
     # Version tracking
     branch_version: str = "Part_A_v1.0"

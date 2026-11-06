@@ -81,6 +81,17 @@
 
 ---
 
+## 3. Supplementary Smartphone Benchmark — SMALL v1.0.0 (Mendeley Data)
+- **Dataset:** SMALL v1.0.0 (Smartphone Multi-Device Low-Light Dataset, 5 phone models across 371 scenes).
+- **Split:** Official Test Split (50 low/reference pairs, scene-disjoint).
+- **Protocol:** Evaluated strictly as an independent supplementary mobile-camera benchmark per SUPPLEMENTARY_DATASET_RESEARCH.md.
+
+| Approach | 1. PSNR (dB) ↑ | 1. SSIM ↑ | 2. LPIPS ↓ | 3. NIQE ↓ | 4. Processing Latency (ms / s) ↓ | 5a. Noise Suppression (Residual $\hat{\sigma}_{\text{MAD}}$ ↓ / Score) | 5b. Edge Preservation (EPI ↑) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| **Classical CV Only** | 9.64 | 0.2128 | 1.0594 | 9.8023 | 185.0 ms (0.185 s) | 11.51 (score 0.785) | 0.2547 |
+| **Deep Learning Only (Adapted)** | 12.37 | 0.5267 | 0.6868 | 5.7620 | 4783.0 ms (4.783 s) | 0.84 (score 0.996) | 0.3012 |
+| **Adaptive Hybrid (ARHR Proposed)** | 11.42 | 0.4002 | 0.8476 | 7.9822 | 5053.5 ms (5.054 s) | 4.25 (score 0.954) | 0.3093 |
+
 ## 4. Ablation Study
 
 ### Ablation Study — Component Contribution Analysis

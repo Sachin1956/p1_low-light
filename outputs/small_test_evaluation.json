@@ -1,0 +1,55 @@
+{
+  "dataset": "SMALL v1.0.0 (Smartphone Multi-Device Low-Light Dataset)",
+  "split": "Official Test Split (50 pairs)",
+  "num_pairs": 50,
+  "results": [
+    {
+      "approach_name": "Classical CV Only",
+      "psnr_db": 9.64,
+      "ssim": 0.2128,
+      "lpips": 1.0594,
+      "niqe": 9.8023,
+      "latency_ms": 185.0,
+      "shadow_noise_mad": 11.51,
+      "noise_suppression_db": -10.58,
+      "noise_suppression_score": 0.785,
+      "edge_preservation_epi": 0.2547,
+      "num_images": 50,
+      "resolution": "768 max-side",
+      "hardware": "CPU",
+      "latency_sec": 0.185
+    },
+    {
+      "approach_name": "Deep Learning Only (Adapted)",
+      "psnr_db": 12.37,
+      "ssim": 0.5267,
+      "lpips": 0.6868,
+      "niqe": 5.762,
+      "latency_ms": 4783.0,
+      "shadow_noise_mad": 0.84,
+      "noise_suppression_db": -3.6,
+      "noise_suppression_score": 0.996,
+      "edge_preservation_epi": 0.3012,
+      "num_images": 50,
+      "resolution": "768 max-side",
+      "hardware": "CPU",
+      "latency_sec": 4.783
+    },
+    {
+      "approach_name": "Adaptive Hybrid (ARHR Proposed)",
+      "psnr_db": 11.42,
+      "ssim": 0.4002,
+      "lpips": 0.8476,
+      "niqe": 7.9822,
+      "latency_ms": 5053.5,
+      "shadow_noise_mad": 4.25,
+      "noise_suppression_db": -18.68,
+      "noise_suppression_score": 0.954,
+      "edge_preservation_epi": 0.3093,
+      "num_images": 50,
+      "resolution": "768 max-side",
+      "hardware": "CPU",
+      "latency_sec": 5.0535
+    }
+  ]
+}

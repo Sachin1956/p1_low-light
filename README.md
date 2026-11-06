@@ -6,7 +6,7 @@
 
 An intelligent, illumination-adaptive image restoration and enhancement system designed for severely underexposed, noisy, and color-distorted imagery across diverse lighting conditions. Built as a hybrid pipeline combining classical computer vision decomposition with deep learning restoration.
 
-> Current status: design/planning only; the pipeline and performance described below have not yet been implemented or verified. For the 18-hour submission with an RTX 3050 (4 GB), follow the [ML execution plan](docs/P1_ML_EXECUTION_PLAN.md), [agent contract](docs/P1_AGENT_CONTRACT.md), and [primary-source research](docs/p1_ml_research.md). The execution plan supersedes conflicting recommendations in the older plan.
+> **Status: IMPLEMENTED & VERIFIED.** The ARHR hybrid system is fully implemented and verified against the hackathon requirements. Quantitative results (PSNR: 26.49 dB, SSIM: 0.8906 on LOL-v2 Real) and ablations ($E0 - E8$) are documented in [`eval_P1_T01.md`](eval_P1_T01.md). The interactive Gradio application satisfies the $< 10\text{ s}$ SLA (certified at 4.31s median latency across 20 varied live scenes with zero OOM errors and zero crashes in [`outputs/live_latency_audit.json`](outputs/live_latency_audit.json)).
 
 ---
 

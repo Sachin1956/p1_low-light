@@ -6,6 +6,8 @@
 
 An intelligent, illumination-adaptive image restoration and enhancement system designed for severely underexposed, noisy, and color-distorted imagery across diverse lighting conditions. Built as a hybrid pipeline combining classical computer vision decomposition with deep learning restoration.
 
+> Current status: design/planning only; the pipeline and performance described below have not yet been implemented or verified. For the 18-hour submission with an RTX 3050 (4 GB), follow the [ML execution plan](docs/P1_ML_EXECUTION_PLAN.md), [agent contract](docs/P1_AGENT_CONTRACT.md), and [primary-source research](docs/p1_ml_research.md). The execution plan supersedes conflicting recommendations in the older plan.
+
 ---
 
 ## 📌 Problem Statement Overview

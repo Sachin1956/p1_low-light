@@ -1,0 +1,42 @@
+{
+  "status": "COMPLETED",
+  "device": "cuda",
+  "total_updates": 2000,
+  "best_val_loss": 0.08214547514915466,
+  "best_checkpoint_sha256": "52754326f50eea302238a9d1d0f84b7f733ecf6a1bdba3bc0880bb9bba349c61",
+  "total_time_min": 10.3,
+  "history": [
+    {
+      "update": 250,
+      "val_loss": 0.08214547514915466
+    },
+    {
+      "update": 500,
+      "val_loss": 0.08567208401858807
+    },
+    {
+      "update": 750,
+      "val_loss": 0.08660172812640667
+    },
+    {
+      "update": 1000,
+      "val_loss": 0.08764833573251962
+    },
+    {
+      "update": 1250,
+      "val_loss": 0.0879510947316885
+    },
+    {
+      "update": 1500,
+      "val_loss": 0.09295834969729184
+    },
+    {
+      "update": 1750,
+      "val_loss": 0.08810985051095485
+    },
+    {
+      "update": 2000,
+      "val_loss": 0.08650653634220362
+    }
+  ]
+}

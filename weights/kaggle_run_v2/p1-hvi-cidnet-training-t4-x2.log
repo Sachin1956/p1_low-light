@@ -1,0 +1,73 @@
+[{"stream_name":"stdout","time":18.61894846,"data":"=== Kaggle Running on device: cuda ===\n"}
+,{"stream_name":"stdout","time":18.662158892,"data":"Device name: Tesla T4\n"}
+,{"stream_name":"stdout","time":18.662195416,"data":"Device count: 2\n"}
+,{"stream_name":"stdout","time":18.662201502,"data":"Device VRAM: 14.56 GB\n"}
+,{"stream_name":"stdout","time":18.662383366,"data":"Cloning official HVI-CIDNet repository...\n"}
+,{"stream_name":"stderr","time":18.754666514,"data":"Cloning into 'HVI-CIDNet'...\n"}
+,{"stream_name":"stdout","time":23.326043081999998,"data":"--\u003e Using Drive Dataset path: /kaggle/input/datasets/ssachithananthan/p1-drive-datasets/LOLv2-real/LOLv2-real/LOL-v2/Real_captured\n"}
+,{"stream_name":"stdout","time":23.326080673,"data":"Using DATASET_DIR: /kaggle/input/datasets/ssachithananthan/p1-drive-datasets/LOLv2-real/LOLv2-real/LOL-v2/Real_captured\n"}
+,{"stream_name":"stdout","time":29.736122395,"data":"Found pretrained checkpoint: /kaggle/input/datasets/milan400/cidnet-weights/CIDNETweights/lolv2/best_PSNR.pth\n"}
+,{"stream_name":"stdout","time":30.391712243,"data":"Total pairs: 689 -\u003e Train: 551, Validation: 138\n"}
+,{"stream_name":"stdout","time":31.131812204,"data":"Loaded pretrained state dict with strict=True.\n"}
+,{"stream_name":"stdout","time":38.56684228,"data":"Beginning 2,000 updates on cuda...\n"}
+,{"stream_name":"stdout","time":52.317960902,"data":"Update [1/2000] | Loss: 0.078457 | Elapsed: 0.2m\n"}
+,{"stream_name":"stdout","time":130.89826036,"data":"Update [50/2000] | Loss: 0.073064 | Elapsed: 1.5m\n"}
+,{"stream_name":"stdout","time":166.055310828,"data":"Update [100/2000] | Loss: 0.104921 | Elapsed: 2.1m\n"}
+,{"stream_name":"stdout","time":178.647737693,"data":"Update [150/2000] | Loss: 0.093908 | Elapsed: 2.3m\n"}
+,{"stream_name":"stdout","time":191.833530505,"data":"Update [200/2000] | Loss: 0.098162 | Elapsed: 2.6m\n"}
+,{"stream_name":"stdout","time":204.521256537,"data":"Update [250/2000] | Loss: 0.088647 | Elapsed: 2.8m\n"}
+,{"stream_name":"stdout","time":217.503028509,"data":"--\u003e [Val @ Update 250] Val Loss: 0.082145\n"}
+,{"stream_name":"stdout","time":217.535318294,"data":"Saved new best model checkpoint.\n"}
+,{"stream_name":"stdout","time":229.981610027,"data":"Update [300/2000] | Loss: 0.108585 | Elapsed: 3.2m\n"}
+,{"stream_name":"stdout","time":242.395912057,"data":"Update [350/2000] | Loss: 0.100512 | Elapsed: 3.4m\n"}
+,{"stream_name":"stdout","time":254.628721115,"data":"Update [400/2000] | Loss: 0.140959 | Elapsed: 3.6m\n"}
+,{"stream_name":"stdout","time":266.928272385,"data":"Update [450/2000] | Loss: 0.109756 | Elapsed: 3.8m\n"}
+,{"stream_name":"stdout","time":279.11929717,"data":"Update [500/2000] | Loss: 0.083060 | Elapsed: 4.0m\n"}
+,{"stream_name":"stdout","time":281.217847188,"data":"--\u003e [Val @ Update 500] Val Loss: 0.085672\n"}
+,{"stream_name":"stdout","time":293.591495917,"data":"Update [550/2000] | Loss: 0.097320 | Elapsed: 4.3m\n"}
+,{"stream_name":"stdout","time":305.956072155,"data":"Update [600/2000] | Loss: 0.067496 | Elapsed: 4.5m\n"}
+,{"stream_name":"stdout","time":318.262821291,"data":"Update [650/2000] | Loss: 0.102901 | Elapsed: 4.7m\n"}
+,{"stream_name":"stdout","time":330.596112811,"data":"Update [700/2000] | Loss: 0.066805 | Elapsed: 4.9m\n"}
+,{"stream_name":"stdout","time":342.612617802,"data":"Update [750/2000] | Loss: 0.090855 | Elapsed: 5.1m\n"}
+,{"stream_name":"stdout","time":344.381836701,"data":"--\u003e [Val @ Update 750] Val Loss: 0.086602\n"}
+,{"stream_name":"stdout","time":356.644394488,"data":"Update [800/2000] | Loss: 0.102154 | Elapsed: 5.3m\n"}
+,{"stream_name":"stdout","time":368.782058497,"data":"Update [850/2000] | Loss: 0.095386 | Elapsed: 5.5m\n"}
+,{"stream_name":"stdout","time":381.130841839,"data":"Update [900/2000] | Loss: 0.099136 | Elapsed: 5.7m\n"}
+,{"stream_name":"stdout","time":393.124905339,"data":"Update [950/2000] | Loss: 0.081491 | Elapsed: 5.9m\n"}
+,{"stream_name":"stdout","time":405.252271265,"data":"Update [1000/2000] | Loss: 0.098373 | Elapsed: 6.1m\n"}
+,{"stream_name":"stdout","time":406.887866674,"data":"--\u003e [Val @ Update 1000] Val Loss: 0.087648\n"}
+,{"stream_name":"stdout","time":419.013818703,"data":"Update [1050/2000] | Loss: 0.062375 | Elapsed: 6.3m\n"}
+,{"stream_name":"stdout","time":431.110743783,"data":"Update [1100/2000] | Loss: 0.079190 | Elapsed: 6.5m\n"}
+,{"stream_name":"stdout","time":443.414471422,"data":"Update [1150/2000] | Loss: 0.074293 | Elapsed: 6.7m\n"}
+,{"stream_name":"stdout","time":455.75335362,"data":"Update [1200/2000] | Loss: 0.071882 | Elapsed: 7.0m\n"}
+,{"stream_name":"stdout","time":467.894629618,"data":"Update [1250/2000] | Loss: 0.088742 | Elapsed: 7.2m\n"}
+,{"stream_name":"stdout","time":469.553196172,"data":"--\u003e [Val @ Update 1250] Val Loss: 0.087951\n"}
+,{"stream_name":"stdout","time":481.5374883,"data":"Update [1300/2000] | Loss: 0.103245 | Elapsed: 7.4m\n"}
+,{"stream_name":"stdout","time":493.726508476,"data":"Update [1350/2000] | Loss: 0.095045 | Elapsed: 7.6m\n"}
+,{"stream_name":"stdout","time":505.86808809,"data":"Update [1400/2000] | Loss: 0.063790 | Elapsed: 7.8m\n"}
+,{"stream_name":"stdout","time":517.955271947,"data":"Update [1450/2000] | Loss: 0.085052 | Elapsed: 8.0m\n"}
+,{"stream_name":"stdout","time":529.876645188,"data":"Update [1500/2000] | Loss: 0.075908 | Elapsed: 8.2m\n"}
+,{"stream_name":"stdout","time":531.58809533,"data":"--\u003e [Val @ Update 1500] Val Loss: 0.092958\n"}
+,{"stream_name":"stdout","time":543.672245287,"data":"Update [1550/2000] | Loss: 0.054396 | Elapsed: 8.4m\n"}
+,{"stream_name":"stdout","time":555.748065476,"data":"Update [1600/2000] | Loss: 0.061284 | Elapsed: 8.6m\n"}
+,{"stream_name":"stdout","time":567.651932509,"data":"Update [1650/2000] | Loss: 0.106999 | Elapsed: 8.8m\n"}
+,{"stream_name":"stdout","time":579.744659272,"data":"Update [1700/2000] | Loss: 0.082680 | Elapsed: 9.0m\n"}
+,{"stream_name":"stdout","time":591.913787275,"data":"Update [1750/2000] | Loss: 0.142026 | Elapsed: 9.2m\n"}
+,{"stream_name":"stdout","time":593.583537236,"data":"--\u003e [Val @ Update 1750] Val Loss: 0.088110\n"}
+,{"stream_name":"stdout","time":605.731768647,"data":"Update [1800/2000] | Loss: 0.095632 | Elapsed: 9.5m\n"}
+,{"stream_name":"stdout","time":617.784970436,"data":"Update [1850/2000] | Loss: 0.090329 | Elapsed: 9.7m\n"}
+,{"stream_name":"stdout","time":630.061768988,"data":"Update [1900/2000] | Loss: 0.078942 | Elapsed: 9.9m\n"}
+,{"stream_name":"stdout","time":642.628988186,"data":"Update [1950/2000] | Loss: 0.084073 | Elapsed: 10.1m\n"}
+,{"stream_name":"stdout","time":654.773121109,"data":"Update [2000/2000] | Loss: 0.067207 | Elapsed: 10.3m\n"}
+,{"stream_name":"stdout","time":656.516451463,"data":"--\u003e [Val @ Update 2000] Val Loss: 0.086507\n"}
+,{"stream_name":"stdout","time":656.580615982,"data":"Training finished in 10.3 minutes!\n"}
+,{"stream_name":"stderr","time":656.846487653,"data":"/kaggle/src/script.py:304: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:213.)\n"}
+,{"stream_name":"stderr","time":656.846536432,"data":"  t = torch.from_numpy(orig.transpose(2, 0, 1)).float().div(255.0).unsqueeze(0)\n"}
+,{"stream_name":"stdout","time":659.035261253,"data":"All Kaggle artifacts, checkpoints, and handoff predictions successfully generated!\n"}
+,{"stream_name":"stderr","time":672.773276313,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":672.773325405,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":673.260897866,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":673.260949523,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":674.449684848,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":676.03525144,"data":"[NbConvertApp] Writing 334845 bytes to __results__.html\n"}
+]

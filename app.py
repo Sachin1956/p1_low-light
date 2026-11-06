@@ -31,7 +31,9 @@ from p1.interface import (
 )
 
 _REPO_ROOT = Path(__file__).resolve().parent
-_CKPT_PATH = _REPO_ROOT / "weights" / "kaggle_run_v2" / "p1_kaggle_output" / "best_model.pth"
+v3_ckpt = _REPO_ROOT / "weights" / "kaggle_run_v3" / "p1_multidataset_output" / "best_model.pth"
+v2_ckpt = _REPO_ROOT / "weights" / "kaggle_run_v2" / "p1_kaggle_output" / "best_model.pth"
+_CKPT_PATH = v3_ckpt if v3_ckpt.exists() else v2_ckpt
 if not _CKPT_PATH.exists():
     # Fallback to pretrained
     _CKPT_PATH = _REPO_ROOT / "weights" / "cidnet" / "CIDNETweights" / "lolv2" / "best_PSNR.pth"

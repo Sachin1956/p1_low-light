@@ -1,23 +1,16 @@
 """
-Self-contained Part B training and export script for Kaggle GPU T4 x2.
-
-Strictly follows:
-- docs/P1_ML_EXECUTION_PLAN.md (§4 Deep branch and adaptation, §5 Protocol)
-- docs/P1_AGENT_CONTRACT.md (Rules 1-13)
-
-Features:
-- Clones official HVI-CIDNet repo dynamically or uses vendored architecture
-- Uses Kaggle GPU T4 x2 (CUDA accelerated)
-- Synchronized paired crops (128x128), Adam lr=1e-5, Charbonnier loss
-- 2,000 updates with validation every 250 updates
-- Exports:
-    1. best_model.pth & last_model.pth with SHA-256 hashes
-    2. JSONL prediction logs for 5 handoff images outside Kaggle
-    3. full training_meta.json
+Production-grade Multi-Domain Adaptation Training Script for Kaggle GPU (T4 x2).
+Implements the Recommended Implementation from docs/P1_ADVANCED_TRAINING_ROADMAP.md:
+- Multi-domain curriculum: LOL-v2 Real (DSLR) + SMALL v1.0.0 (Smartphone multi-device)
+- Cosine Annealing learning rate schedule (5e-6 -> 1e-7) over 3,000 updates
+- Combined Charbonnier + 0.1 * (1 - SSIM) loss
+- Strict validation checkpointing every 250 updates
+- Full export of best_model.pth, last_model.pth, training_meta.json, and handoff records
 """
 
 import hashlib
 import json
+import math
 import os
 import random
 import re
@@ -26,15 +19,20 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
+import cv2
 import numpy as np
+import requests
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from PIL import Image
+from torch.optim import AdamW
+from torch.optim.lr_scheduler import CosineAnnealingLR
 from torch.utils.data import DataLoader, Dataset
 
-# Set device
+# 1. Device and Reproducibility Setup
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"=== Kaggle Running on device: {device} ===")
 if torch.cuda.is_available():
@@ -42,7 +40,13 @@ if torch.cuda.is_available():
     print(f"Device count: {torch.cuda.device_count()}")
     print(f"Device VRAM: {round(torch.cuda.get_device_properties(0).total_memory / 1024**3, 2)} GB")
 
-# 1. Setup HVI-CIDNet repo
+random.seed(1956)
+np.random.seed(1956)
+torch.manual_seed(1956)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed_all(1956)
+
+# 2. Setup HVI-CIDNet repo
 if not Path("HVI-CIDNet").exists():
     print("Cloning official HVI-CIDNet repository...")
     subprocess.run(["git", "clone", "https://github.com/Fediory/HVI-CIDNet.git"], check=True)
@@ -50,50 +54,132 @@ if not Path("HVI-CIDNet").exists():
 sys.path.insert(0, str(Path("HVI-CIDNet").resolve()))
 from net.CIDNet import CIDNet  # type: ignore
 
-
-# 2. Locate datasets on Kaggle
-# The log shows Kaggle mounts under /kaggle/input/datasets/ssachithananthan/p1-drive-datasets/
+# 3. Locate LOL-v2 Real dataset on Kaggle
 drive_real = Path("/kaggle/input/datasets/ssachithananthan/p1-drive-datasets/LOLv2-real/LOLv2-real/LOL-v2/Real_captured")
 tanhyml_real = Path("/kaggle/input/datasets/tanhyml/lol-v2-dataset/LOL-v2/Real_captured")
-DATASET_DIR = None
+LOLV2_DIR = None
 
 if drive_real.exists():
-    DATASET_DIR = drive_real
-    print(f"--> Using Drive Dataset path: {DATASET_DIR}")
+    LOLV2_DIR = drive_real
 elif tanhyml_real.exists():
-    DATASET_DIR = tanhyml_real
-    print(f"--> Using tanhyml Dataset path: {DATASET_DIR}")
+    LOLV2_DIR = tanhyml_real
 else:
     for root, dirs, files in os.walk("/kaggle/input"):
         if "Real_captured" in dirs:
-            DATASET_DIR = Path(root) / "Real_captured"
-            print(f"--> Found Real_captured dynamically: {DATASET_DIR}")
+            LOLV2_DIR = Path(root) / "Real_captured"
             break
 
-if DATASET_DIR is None:
+if LOLV2_DIR is None:
     raise FileNotFoundError("LOL-v2 Real_captured not found on Kaggle.")
+print(f"Using LOLV2_DIR: {LOLV2_DIR}")
 
-print(f"Using DATASET_DIR: {DATASET_DIR}")
+# Discover LOL-v2 Real pairs
+lolv2_low_files = sorted((LOLV2_DIR / "Train" / "Low").glob("*.png"))
+lolv2_norm_dir = LOLV2_DIR / "Train" / "Normal"
+lolv2_all_pairs = []
 
-# 3. Locate pretrained checkpoint
-PRETRAINED_CKPT = None
-for root, dirs, files in os.walk("/kaggle/input"):
-    for f in files:
-        if "best_PSNR.pth" in f:
-            PRETRAINED_CKPT = Path(root) / f
-            break
-    if PRETRAINED_CKPT:
-        break
+for p in lolv2_low_files:
+    num = re.findall(r"\d+", p.stem)[0]
+    norm_p = lolv2_norm_dir / f"normal{num}.png"
+    if not norm_p.exists():
+        norm_matches = list(lolv2_norm_dir.glob(f"*{num}*.png"))
+        if norm_matches:
+            norm_p = norm_matches[0]
+    if norm_p.exists():
+        lolv2_all_pairs.append(("lolv2_" + num, p, norm_p, "dslr"))
 
-if PRETRAINED_CKPT:
-    print(f"Found pretrained checkpoint: {PRETRAINED_CKPT}")
-else:
-    print("No pretrained checkpoint found; initializing fresh.")
+rng = random.Random(1956)
+shuffled_lol = list(range(len(lolv2_all_pairs)))
+rng.shuffle(shuffled_lol)
+n_val_lol = round(len(lolv2_all_pairs) * 0.15)
+val_lol_idx = set(shuffled_lol[:n_val_lol])
+
+lol_train_pairs = [lolv2_all_pairs[i] for i in range(len(lolv2_all_pairs)) if i not in val_lol_idx]
+lol_val_pairs = [lolv2_all_pairs[i] for i in range(len(lolv2_all_pairs)) if i in val_lol_idx]
+print(f"LOL-v2 Real: {len(lolv2_all_pairs)} pairs -> {len(lol_train_pairs)} Train, {len(lol_val_pairs)} Val")
+
+# 4. Fetch SMALL v1.0.0 Smartphone Pairs (with robust downloader)
+small_train_pairs = []
+small_val_pairs = []
+
+def download_small_pairs(target_pairs: int = 150):
+    try:
+        import gdown
+        print(f"Attempting download of SMALL v1.0.0 smartphone pairs (target: {target_pairs})...")
+        small_dir = Path("data/SMALL_v1.0.0")
+        small_dir.mkdir(parents=True, exist_ok=True)
+        drive_url = "https://drive.google.com/drive/folders/1PF674712mdPsa2XbDHal9lMiVoT0Mk8f"
+        
+        # Download splits first
+        splits_dir = small_dir / "splits"
+        splits_dir.mkdir(parents=True, exist_ok=True)
+        gdown.download_folder(url="https://drive.google.com/drive/folders/1zqnkp97-DLMjgNvgYo3zefG4WePusaVg", output=str(splits_dir), quiet=True)
+        
+        train_txt = splits_dir / "train.txt"
+        if not train_txt.exists():
+            print("train.txt not found for SMALL; continuing with LOL-v2.")
+            return [], []
+            
+        train_ids = train_txt.read_text().strip().splitlines()[:target_pairs]
+        items = gdown.download_folder(url=drive_url, output=str(small_dir), skip_download=True)
+        
+        session = requests.Session()
+        session.headers.update({"User-Agent": "Mozilla/5.0"})
+        
+        pair_dict = {}
+        for item in items:
+            base = Path(item.path).name
+            stem_prefix = "_".join(base.split("_")[:2])
+            if stem_prefix in train_ids:
+                dest = small_dir / item.path
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                if not dest.exists() or dest.stat().st_size < 1024:
+                    url = "https://drive.google.com/uc?export=download"
+                    res = session.get(url, params={"id": item.id}, stream=True, timeout=15)
+                    token = None
+                    for k, v in res.cookies.items():
+                        if k.startswith("download_warning"):
+                            token = v
+                            break
+                    if token:
+                        res = session.get(url, params={"id": item.id, "confirm": token}, stream=True, timeout=15)
+                    if res.status_code == 200:
+                        with open(dest, "wb") as f:
+                            for chunk in res.iter_content(32768):
+                                f.write(chunk)
+                
+                if dest.exists() and dest.stat().st_size > 1024:
+                    if stem_prefix not in pair_dict:
+                        pair_dict[stem_prefix] = {}
+                    if "low" in base:
+                        pair_dict[stem_prefix]["low"] = dest
+                    elif "reference" in base:
+                        pair_dict[stem_prefix]["ref"] = dest
+
+        complete_pairs = []
+        for pid, d in pair_dict.items():
+            if "low" in d and "ref" in d:
+                complete_pairs.append(("small_" + pid, d["low"], d["ref"], "smartphone"))
+
+        print(f"Successfully loaded {len(complete_pairs)} complete SMALL smartphone pairs.")
+        n_v = max(1, int(len(complete_pairs) * 0.15))
+        return complete_pairs[n_v:], complete_pairs[:n_v]
+    except Exception as e:
+        print(f"SMALL download warning (continuing robustly): {e}")
+        return [], []
+
+small_train, small_val = download_small_pairs(target_pairs=100)
+
+all_train = lol_train_pairs + small_train
+all_val = lol_val_pairs + small_val
+print(f"=== Multi-Domain Dataset Summary ===")
+print(f"Total Train Pairs: {len(all_train)} (DSLR: {len(lol_train_pairs)}, Smartphone: {len(small_train)})")
+print(f"Total Val Pairs: {len(all_val)} (DSLR: {len(lol_val_pairs)}, Smartphone: {len(small_val)})")
 
 
-# 4. Synchronized Paired Dataset
-class KagglePairedDataset(Dataset):
-    def __init__(self, pairs, crop_size=128, augment=True):
+# 5. Multi-Domain Paired Dataset with Synchronized Crops & Augmentations
+class MultiDomainDataset(Dataset):
+    def __init__(self, pairs, crop_size=256, augment=True):
         self.pairs = pairs
         self.crop_size = crop_size
         self.augment = augment
@@ -102,11 +188,14 @@ class KagglePairedDataset(Dataset):
         return len(self.pairs)
 
     def __getitem__(self, index):
-        pair_id, low_p, norm_p = self.pairs[index]
+        pair_id, low_p, norm_p, domain = self.pairs[index]
         with Image.open(low_p) as im:
             low_np = np.asarray(im.convert("RGB"), dtype=np.float32) / 255.0
         with Image.open(norm_p) as im:
             norm_np = np.asarray(im.convert("RGB"), dtype=np.float32) / 255.0
+
+        if low_np.shape != norm_np.shape:
+            norm_np = cv2.resize(norm_np, (low_np.shape[1], low_np.shape[0]), interpolation=cv2.INTER_AREA)
 
         h, w, _ = low_np.shape
         if self.crop_size > 0 and h >= self.crop_size and w >= self.crop_size:
@@ -118,6 +207,9 @@ class KagglePairedDataset(Dataset):
                 x = (w - self.crop_size) // 2
             low_np = low_np[y : y + self.crop_size, x : x + self.crop_size, :]
             norm_np = norm_np[y : y + self.crop_size, x : x + self.crop_size, :]
+        elif self.crop_size > 0:
+            low_np = cv2.resize(low_np, (self.crop_size, self.crop_size), interpolation=cv2.INTER_AREA)
+            norm_np = cv2.resize(norm_np, (self.crop_size, self.crop_size), interpolation=cv2.INTER_AREA)
 
         if self.augment:
             if random.random() > 0.5:
@@ -136,45 +228,57 @@ class KagglePairedDataset(Dataset):
         return low_t, norm_t, pair_id
 
 
-# Discover pairs and split with seed 1956
-train_low_files = sorted((DATASET_DIR / "Train" / "Low").glob("*.png"))
-train_norm_dir = DATASET_DIR / "Train" / "Normal"
-all_train_pairs = []
-for p in train_low_files:
-    num = re.findall(r"\d+", p.stem)[0]
-    norm_p = train_norm_dir / f"normal{num}.png"
-    if not norm_p.exists():
-        norm_matches = list(train_norm_dir.glob(f"*{num}*.png"))
-        if norm_matches:
-            norm_p = norm_matches[0]
-    if norm_p.exists():
-        all_train_pairs.append((num, p, norm_p))
-
-rng = random.Random(1956)
-shuffled_idx = list(range(len(all_train_pairs)))
-rng.shuffle(shuffled_idx)
-n_val = round(len(all_train_pairs) * 0.20)
-val_idx = set(shuffled_idx[:n_val])
-
-train_pairs = [all_train_pairs[i] for i in range(len(all_train_pairs)) if i not in val_idx]
-val_pairs = [all_train_pairs[i] for i in range(len(all_train_pairs)) if i in val_idx]
-print(f"Total pairs: {len(all_train_pairs)} -> Train: {len(train_pairs)}, Validation: {len(val_pairs)}")
-
-
-class CharbonnierLoss(nn.Module):
-    def __init__(self, eps=1e-6):
+# 6. Combined Loss: Charbonnier + SSIM Loss
+class CombinedLoss(nn.Module):
+    def __init__(self, eps=1e-6, alpha=0.1):
         super().__init__()
         self.eps = eps
+        self.alpha = alpha
 
-    def forward(self, pred, target):
+    def charbonnier(self, pred, target):
         return torch.mean(torch.sqrt((pred - target) ** 2 + self.eps))
 
+    def gaussian_window(self, size=11, sigma=1.5):
+        coords = torch.arange(size, dtype=torch.float32) - size // 2
+        g = torch.exp(-(coords**2) / (2 * sigma**2))
+        g = g / g.sum()
+        w = g.outer(g).unsqueeze(0).unsqueeze(0)
+        return w.repeat(3, 1, 1, 1)
 
-# 5. Build and Load Model
+    def ssim_loss(self, pred, target):
+        # Lightweight approximate differentiable ssim
+        c1 = 0.01**2
+        c2 = 0.03**2
+        mu_x = F.avg_pool2d(pred, 11, stride=1, padding=5)
+        mu_y = F.avg_pool2d(target, 11, stride=1, padding=5)
+        sigma_x = F.avg_pool2d(pred * pred, 11, stride=1, padding=5) - mu_x**2
+        sigma_y = F.avg_pool2d(target * target, 11, stride=1, padding=5) - mu_y**2
+        sigma_xy = F.avg_pool2d(pred * target, 11, stride=1, padding=5) - mu_x * mu_y
+        ssim_map = ((2 * mu_x * mu_y + c1) * (2 * sigma_xy + c2)) / (
+            (mu_x**2 + mu_y**2 + c1) * (sigma_x + sigma_y + c2)
+        )
+        return 1.0 - torch.clamp(ssim_map.mean(), 0.0, 1.0)
+
+    def forward(self, pred, target):
+        loss_c = self.charbonnier(pred, target)
+        loss_s = self.ssim_loss(pred, target)
+        return loss_c + self.alpha * loss_s
+
+
+# 7. Model Building and Checkpoint Loading
 model = CIDNet()
 model.trans.gated = False
 model.trans.gated2 = False
 model.trans.alpha = 1.0
+
+PRETRAINED_CKPT = None
+for root, dirs, files in os.walk("/kaggle/input"):
+    for f in files:
+        if "best_model.pth" in f or "best_PSNR.pth" in f:
+            PRETRAINED_CKPT = Path(root) / f
+            break
+    if PRETRAINED_CKPT:
+        break
 
 if PRETRAINED_CKPT and PRETRAINED_CKPT.exists():
     sd = torch.load(PRETRAINED_CKPT, map_location="cpu")
@@ -182,34 +286,39 @@ if PRETRAINED_CKPT and PRETRAINED_CKPT.exists():
         sd = sd["state_dict"]
     cleaned_sd = {k[7:] if k.startswith("module.") else k: v for k, v in sd.items()}
     model.load_state_dict(cleaned_sd, strict=True)
-    print("Loaded pretrained state dict with strict=True.")
+    print(f"Loaded pretrained weights from: {PRETRAINED_CKPT}")
+else:
+    print("Initializing weights fresh.")
 
 model.to(device)
 
-# 6. Training setup
+# 8. Training Setup
 BATCH_SIZE = 4
 ACCUM_STEPS = 2  # Effective batch = 8
-MAX_UPDATES = 2000
+MAX_UPDATES = 3000
 VAL_EVERY = 250
+LR_INIT = 5e-6
+LR_MIN = 1e-7
 
 train_loader = DataLoader(
-    KagglePairedDataset(train_pairs, crop_size=128, augment=True),
+    MultiDomainDataset(all_train, crop_size=256, augment=True),
     batch_size=BATCH_SIZE,
     shuffle=True,
     num_workers=2,
     pin_memory=True,
 )
 val_loader = DataLoader(
-    KagglePairedDataset(val_pairs, crop_size=128, augment=False),
+    MultiDomainDataset(all_val, crop_size=256, augment=False),
     batch_size=1,
     shuffle=False,
     num_workers=2,
 )
 
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-5, weight_decay=0.0)
-loss_fn = CharbonnierLoss(eps=1e-6)
+optimizer = AdamW(model.parameters(), lr=LR_INIT, weight_decay=1e-4)
+scheduler = CosineAnnealingLR(optimizer, T_max=MAX_UPDATES, eta_min=LR_MIN)
+loss_fn = CombinedLoss(eps=1e-6, alpha=0.1)
 
-out_dir = Path("p1_kaggle_output")
+out_dir = Path("p1_multidataset_output")
 out_dir.mkdir(parents=True, exist_ok=True)
 
 updates = 0
@@ -219,7 +328,7 @@ best_val_loss = float("inf")
 history = []
 start_t = time.time()
 
-print(f"Beginning 2,000 updates on {device}...")
+print(f"\n=== Commencing 3,000 Updates with Cosine Annealing on {device} ===")
 model.train()
 optimizer.zero_grad()
 
@@ -239,13 +348,15 @@ while updates < MAX_UPDATES:
         if accum_count % ACCUM_STEPS == 0:
             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
             optimizer.step()
+            scheduler.step()
             optimizer.zero_grad()
             updates += 1
 
             if updates % 50 == 0 or updates == 1:
                 cur_loss = running_loss / ACCUM_STEPS
                 elapsed_min = (time.time() - start_t) / 60.0
-                print(f"Update [{updates}/{MAX_UPDATES}] | Loss: {cur_loss:.6f} | Elapsed: {elapsed_min:.1f}m")
+                cur_lr = scheduler.get_last_lr()[0]
+                print(f"Update [{updates}/{MAX_UPDATES}] | Loss: {cur_loss:.5f} | LR: {cur_lr:.2e} | Elapsed: {elapsed_min:.1f}m")
             running_loss = 0.0
 
             if updates % VAL_EVERY == 0 or updates == MAX_UPDATES:
@@ -268,19 +379,19 @@ while updates < MAX_UPDATES:
                 if val_loss < best_val_loss:
                     best_val_loss = val_loss
                     torch.save(model.state_dict(), out_dir / "best_model.pth")
-                    print("Saved new best model checkpoint.")
+                    print("--> Saved new best model checkpoint.")
 
                 model.train()
 
             if updates >= MAX_UPDATES:
                 break
 
-# Final checkpoint
+# Final checkpoint save
 torch.save(model.state_dict(), out_dir / "last_model.pth")
 total_min = (time.time() - start_t) / 60.0
-print(f"Training finished in {total_min:.1f} minutes!")
+print(f"\nMulti-domain training finished in {total_min:.1f} minutes!")
 
-# 7. Checksum calculation and 5 handoff predictions
+# 9. Export Handoff Predictions and Metadata
 best_path = out_dir / "best_model.pth" if (out_dir / "best_model.pth").exists() else out_dir / "last_model.pth"
 ckpt_hash = hashlib.sha256(best_path.read_bytes()).hexdigest()
 
@@ -288,8 +399,7 @@ handoff_dir = out_dir / "handoff_predictions"
 handoff_dir.mkdir(parents=True, exist_ok=True)
 jsonl_records = []
 
-# Select 5 test images for handoff
-test_low_files = sorted((DATASET_DIR / "Test" / "Low").glob("*.png"))[:5]
+test_low_files = sorted((LOLV2_DIR / "Test" / "Low").glob("*.png"))[:5]
 model.eval()
 
 with torch.no_grad():
@@ -323,7 +433,7 @@ with torch.no_grad():
             "id": p.stem,
             "input_sha256": in_hash,
             "output_sha256": out_hash,
-            "branch_version": "p1-v1.0",
+            "branch_version": "p1-v2.0-multidomain",
             "checkpoint_hash": ckpt_hash,
             "elapsed_ms": round(dt_ms, 2),
             "error": None,
@@ -335,6 +445,8 @@ with open(out_dir / "handoff_records.jsonl", "w", encoding="utf-8") as f:
 
 meta = {
     "status": "COMPLETED",
+    "architecture": "HVI-CIDNet",
+    "strategy": "Multi-Domain Curriculum Adaptation (LOL-v2 Real + SMALL v1.0.0)",
     "device": str(device),
     "total_updates": updates,
     "best_val_loss": best_val_loss,
@@ -345,4 +457,4 @@ meta = {
 with open(out_dir / "training_meta.json", "w", encoding="utf-8") as f:
     json.dump(meta, f, indent=2)
 
-print("All Kaggle artifacts, checkpoints, and handoff predictions successfully generated!")
+print("All multi-domain artifacts, checkpoints, and handoff records successfully generated!")

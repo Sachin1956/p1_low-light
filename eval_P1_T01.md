@@ -25,9 +25,9 @@
 
 | Approach | 1. PSNR (dB) ↑ | 1. SSIM ↑ | 2. LPIPS ↓ | 3. NIQE ↓ | 4. Processing Latency (ms / s) ↓ | 5a. Noise Suppression (Residual $\hat{\sigma}_{\text{MAD}}$ ↓ / Gain dB ↑) | 5b. Edge Preservation (EPI ↑) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **Classical CV Only** | 14.74 | 0.4447 | 0.4999 | 9.0019 | 198.1 ms (0.198 s) | 10.30 / +-4.48 dB (score 0.884) | 0.7084 |
-| **Deep Learning Only (Adapted)** | 26.49 | 0.8906 | 0.0710 | 4.8126 | 1730.5 ms (1.730 s) | 1.17 / +18.86 dB (score 0.996) | 0.9334 |
-| **Adaptive Hybrid (ARHR Proposed)** | 21.18 | 0.7907 | 0.1665 | 6.5599 | 1839.9 ms (1.840 s) | 3.35 / +8.31 dB (score 0.984) | 0.8992 |
+| **Classical CV Only** | 14.74 | 0.4447 | 0.4999 | 9.0019 | 247.9 ms (0.248 s) | 10.30 / +-4.48 dB (score 0.884) | 0.7084 |
+| **Deep Learning Only (Adapted)** | 27.52 | 0.9002 | 0.0742 | 4.8376 | 2090.0 ms (2.090 s) | 0.80 / +22.44 dB (score 0.998) | 0.9338 |
+| **Adaptive Hybrid (ARHR Proposed)** | 22.91 | 0.8062 | 0.1612 | 6.4326 | 2106.6 ms (2.107 s) | 3.24 / +9.32 dB (score 0.986) | 0.9004 |
 
 ---
 
@@ -39,8 +39,8 @@
 | Approach | PSNR (dB) ↑ | SSIM ↑ |
 |---|---:|---:|
 | Classical CV Only | 14.74 | 0.4447 |
-| Deep Learning Only (Adapted) | 26.49 | 0.8906 |
-| Adaptive Hybrid (ARHR Proposed) | 21.18 | 0.7907 |
+| Deep Learning Only (Adapted) | 27.52 | 0.9002 |
+| Adaptive Hybrid (ARHR Proposed) | 22.91 | 0.8062 |
 
 ### Metric 2: LPIPS (Learned Perceptual Image Patch Similarity)
 - **Definition:** Deep feature perceptual distance (AlexNet backbone, lower is better) measuring human-aligned texture and perceptual fidelity.
@@ -48,8 +48,8 @@
 | Approach | LPIPS ↓ |
 |---|---:|
 | Classical CV Only | 0.4999 |
-| Deep Learning Only (Adapted) | 0.0710 |
-| Adaptive Hybrid (ARHR Proposed) | 0.1665 |
+| Deep Learning Only (Adapted) | 0.0742 |
+| Adaptive Hybrid (ARHR Proposed) | 0.1612 |
 
 ### Metric 3: NIQE (No-Reference Image Quality Metric)
 - **Definition:** Natural Image Quality Evaluator based on Mean Subtracted Contrast Normalized (MSCN) Natural Scene Statistics (lower is better).
@@ -57,17 +57,17 @@
 | Approach | NIQE ↓ |
 |---|---:|
 | Classical CV Only | 9.0019 |
-| Deep Learning Only (Adapted) | 4.8126 |
-| Adaptive Hybrid (ARHR Proposed) | 6.5599 |
+| Deep Learning Only (Adapted) | 4.8376 |
+| Adaptive Hybrid (ARHR Proposed) | 6.4326 |
 
 ### Metric 4: Processing Latency
 - **Definition:** Mean end-to-end processing time per image in milliseconds and seconds (lower is better; must remain well under the $< 10\text{ s}$ live deployment requirement).
 
 | Approach | Mean Latency (ms) ↓ | Mean Latency (s) ↓ | Meets $< 10\text{ s}$ Rubric Target |
 |---|---:|---:|:---:|
-| Classical CV Only | 198.10 ms | 0.198 s | Yes |
-| Deep Learning Only (Adapted) | 1730.50 ms | 1.730 s | Yes |
-| Adaptive Hybrid (ARHR Proposed) | 1839.90 ms | 1.840 s | Yes |
+| Classical CV Only | 247.90 ms | 0.248 s | Yes |
+| Deep Learning Only (Adapted) | 2090.00 ms | 2.090 s | Yes |
+| Adaptive Hybrid (ARHR Proposed) | 2106.60 ms | 2.107 s | Yes |
 
 ### Metric 5: Noise Suppression and Edge Preservation
 - **Noise Suppression Definition:** High-frequency diagonal wavelet Median Absolute Deviation ($\hat{\sigma}_{\text{MAD}} = \text{median}(|W_{HH}|)/0.6745$) measured in homogeneous shadow regions (lower residual $\hat{\sigma}_{\text{MAD}}$ and higher gain-normalized suppression dB are better).
@@ -76,21 +76,23 @@
 | Approach | Residual Shadow Noise $\hat{\sigma}_{\text{MAD}}$ ↓ | Gain-Normalized Noise Suppression (dB) ↑ | Noise Cleanliness Score $[0,1]$ ↑ | Edge Preservation Index (EPI) ↑ |
 |---|---:|---:|---:|---:|
 | Classical CV Only | 10.30 | +-4.48 dB | 0.884 | 0.7084 |
-| Deep Learning Only (Adapted) | 1.17 | +18.86 dB | 0.996 | 0.9334 |
-| Adaptive Hybrid (ARHR Proposed) | 3.35 | +8.31 dB | 0.984 | 0.8992 |
+| Deep Learning Only (Adapted) | 0.80 | +22.44 dB | 0.998 | 0.9338 |
+| Adaptive Hybrid (ARHR Proposed) | 3.24 | +9.32 dB | 0.986 | 0.9004 |
+
+---
 
 ---
 
 ## 3. Supplementary Smartphone Benchmark — SMALL v1.0.0 (Mendeley Data)
 - **Dataset:** SMALL v1.0.0 (Smartphone Multi-Device Low-Light Dataset, 5 phone models across 371 scenes).
 - **Split:** Official Test Split (50 low/reference pairs, scene-disjoint).
-- **Protocol:** Evaluated strictly as an independent supplementary mobile-camera benchmark per SUPPLEMENTARY_DATASET_RESEARCH.md.
+- **Protocol:** Evaluated strictly as an independent supplementary mobile-camera benchmark per `SUPPLEMENTARY_DATASET_RESEARCH.md`.
 
 | Approach | 1. PSNR (dB) ↑ | 1. SSIM ↑ | 2. LPIPS ↓ | 3. NIQE ↓ | 4. Processing Latency (ms / s) ↓ | 5a. Noise Suppression (Residual $\hat{\sigma}_{\text{MAD}}$ ↓ / Score) | 5b. Edge Preservation (EPI ↑) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **Classical CV Only** | 9.64 | 0.2128 | 1.0594 | 9.8023 | 185.0 ms (0.185 s) | 11.51 (score 0.785) | 0.2547 |
-| **Deep Learning Only (Adapted)** | 12.37 | 0.5267 | 0.6868 | 5.7620 | 4783.0 ms (4.783 s) | 0.84 (score 0.996) | 0.3012 |
-| **Adaptive Hybrid (ARHR Proposed)** | 11.42 | 0.4002 | 0.8476 | 7.9822 | 5053.5 ms (5.054 s) | 4.25 (score 0.954) | 0.3093 |
+| **Classical CV Only** | 9.64 | 0.2128 | 1.0594 | 9.8023 | 131.6 ms (0.132 s) | 11.51 (score 0.785) | 0.2547 |
+| **Deep Learning Only (Adapted)** | 11.98 | 0.5059 | 0.6883 | 5.4256 | 3796.2 ms (3.796 s) | 0.84 (score 0.996) | 0.3012 |
+| **Adaptive Hybrid (ARHR Proposed)** | 11.19 | 0.3910 | 0.8470 | 7.7293 | 4206.5 ms (4.207 s) | 4.25 (score 0.954) | 0.3093 |
 
 ## 4. Ablation Study
 
@@ -98,15 +100,15 @@
 
 | Experiment / Configuration | 1. PSNR (dB) ↑ | 1. SSIM ↑ | 2. LPIPS ↓ | 3. NIQE ↓ | 4. Latency (ms) ↓ | 5a. Shadow Noise $\hat{\sigma}_{\text{MAD}}$ ↓ | 5b. Edge Preservation (EPI ↑) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| E0: Fixed Gamma (0.5) | 9.72 | 0.4411 | 0.3855 | 7.6848 | 10.4 | 3.89 | 0.8100 |
-| E1: Fixed Classical (Non-Adaptive) | 12.07 | 0.5071 | 0.4163 | 8.1166 | 70.5 | 4.43 | 0.7942 |
-| E2: Adaptive Classical | 14.74 | 0.4447 | 0.4999 | 9.0019 | 75.0 | 10.30 | 0.7084 |
-| E3: Pretrained Deep Backbone | 27.67 | 0.8824 | 0.0636 | 4.8474 | 1687.0 | 1.42 | 0.9338 |
-| E4: Fine-Tuned Deep Backbone | 26.49 | 0.8906 | 0.0710 | 4.8126 | 1643.2 | 1.17 | 0.9334 |
-| E5: 50/50 Uniform Blend | 19.62 | 0.6536 | 0.2988 | 7.7531 | 1991.2 | 6.03 | 0.8335 |
-| E6: Illumination-Guided Fusion | 23.54 | 0.8486 | 0.1053 | 5.6927 | 1804.0 | 2.45 | 0.9245 |
-| E7: Guided Fusion (Illum+Noise+Edge) | 21.18 | 0.7907 | 0.1665 | 6.5599 | 1814.5 | 3.35 | 0.8992 |
-| E8: Guided Fusion + Quality Guard | 21.18 | 0.7907 | 0.1665 | 6.5599 | 1773.2 | 3.35 | 0.8992 |
+| E0: Fixed Gamma (0.5) | 9.72 | 0.4411 | 0.3855 | 7.6848 | 8.6 | 3.89 | 0.8100 |
+| E1: Fixed Classical (Non-Adaptive) | 12.07 | 0.5071 | 0.4163 | 8.1166 | 63.6 | 4.43 | 0.7942 |
+| E2: Adaptive Classical | 14.74 | 0.4447 | 0.4999 | 9.0019 | 63.4 | 10.30 | 0.7084 |
+| E3: Pretrained Deep Backbone | 27.67 | 0.8824 | 0.0636 | 4.8474 | 2042.0 | 1.42 | 0.9338 |
+| E4: Fine-Tuned Deep Backbone | 27.52 | 0.9002 | 0.0742 | 4.8376 | 1996.0 | 0.80 | 0.9338 |
+| E5: 50/50 Uniform Blend | 20.58 | 0.6643 | 0.2948 | 7.7122 | 2040.2 | 5.99 | 0.8345 |
+| E6: Illumination-Guided Fusion | 26.20 | 0.8633 | 0.1007 | 5.4992 | 2107.8 | 2.29 | 0.9255 |
+| E7: Guided Fusion (Illum+Noise+Edge) | 22.91 | 0.8062 | 0.1612 | 6.4326 | 2124.6 | 3.24 | 0.9004 |
+| E8: Guided Fusion + Quality Guard | 22.91 | 0.8062 | 0.1612 | 6.4326 | 2121.6 | 3.24 | 0.9004 |
 
 ---
 

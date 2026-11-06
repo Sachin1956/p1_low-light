@@ -114,11 +114,17 @@ def main() -> None:
     parser.add_argument("--team-id", type=str, default="T01")
     parser.add_argument("--usns", type=str, default="1RUA24CSE0375, 1RUA24CSE0376, 1RUA24CSE0384, 1RUA24CSE0395")
     parser.add_argument("--samples", type=int, default=25, help="Number of validation samples to evaluate")
+    parser.add_argument("--checkpoint", type=str, default=None, help="Path to deep model checkpoint")
     args = parser.parse_args()
 
     evaluator = LowLightEvaluator(device="cpu")
     manifest = "data_manifests/LOLv2-Real-paired.csv"
-    ckpt = str(_REPO_ROOT / "weights" / "kaggle_run_v2" / "p1_kaggle_output" / "best_model.pth")
+    if args.checkpoint:
+        ckpt = str(Path(args.checkpoint).resolve())
+    elif (_REPO_ROOT / "weights" / "kaggle_run_v3" / "p1_multidataset_output" / "best_model.pth").exists():
+        ckpt = str(_REPO_ROOT / "weights" / "kaggle_run_v3" / "p1_multidataset_output" / "best_model.pth")
+    else:
+        ckpt = str(_REPO_ROOT / "weights" / "kaggle_run_v2" / "p1_kaggle_output" / "best_model.pth")
 
     # 1. Comparative Evaluation (Classical, Deep, Hybrid)
     print("=== 1. Running Comparative Evaluation ===")

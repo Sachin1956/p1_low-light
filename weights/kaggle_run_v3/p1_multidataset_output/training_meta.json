@@ -1,0 +1,60 @@
+{
+  "status": "COMPLETED",
+  "architecture": "HVI-CIDNet",
+  "strategy": "Multi-Domain Curriculum Adaptation (LOL-v2 Real + SMALL v1.0.0)",
+  "device": "cuda",
+  "total_updates": 3000,
+  "best_val_loss": 0.07609397538006306,
+  "best_checkpoint_sha256": "fca75a6fc3a24fa3ef63e9dfa0562f3143e949a1554a34d4016acb8efe8061d5",
+  "total_time_min": 40.65,
+  "history": [
+    {
+      "update": 250,
+      "val_loss": 0.07954245559871197
+    },
+    {
+      "update": 500,
+      "val_loss": 0.07844500716775656
+    },
+    {
+      "update": 750,
+      "val_loss": 0.07617844313383103
+    },
+    {
+      "update": 1000,
+      "val_loss": 0.07938498266041279
+    },
+    {
+      "update": 1250,
+      "val_loss": 0.07839872799813748
+    },
+    {
+      "update": 1500,
+      "val_loss": 0.07609397538006306
+    },
+    {
+      "update": 1750,
+      "val_loss": 0.07657838270068168
+    },
+    {
+      "update": 2000,
+      "val_loss": 0.07639457128942012
+    },
+    {
+      "update": 2250,
+      "val_loss": 0.07717613108456135
+    },
+    {
+      "update": 2500,
+      "val_loss": 0.07774245016276836
+    },
+    {
+      "update": 2750,
+      "val_loss": 0.07776525620371104
+    },
+    {
+      "update": 3000,
+      "val_loss": 0.07788446262478828
+    }
+  ]
+}

@@ -18,7 +18,9 @@ import numpy as np
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MANIFEST_PATH = REPO_ROOT / "data_manifests" / "SMALL-v1.0.0-test.csv"
 OUTPUT_JSON = REPO_ROOT / "outputs" / "small_test_evaluation.json"
-CKPT_PATH = str(REPO_ROOT / "weights" / "kaggle_run_v2" / "p1_kaggle_output" / "best_model.pth")
+v3_ckpt = REPO_ROOT / "weights" / "kaggle_run_v3" / "p1_multidataset_output" / "best_model.pth"
+v2_ckpt = REPO_ROOT / "weights" / "kaggle_run_v2" / "p1_kaggle_output" / "best_model.pth"
+CKPT_PATH = str(v3_ckpt if v3_ckpt.exists() else v2_ckpt)
 
 import sys
 if str(REPO_ROOT) not in sys.path:

@@ -1,0 +1,34 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Datasets & large checkpoints (keep out of git unless explicitly tracked)
+data/
+datasets/
+checkpoints/*.pth
+checkpoints/*.pt
+checkpoints/*.onnx
+weights/*.pth
+weights/*.pt
+
+# IDE / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary outputs / scratch
+tmp/
+outputs/tmp/
+.gradio/

@@ -1,0 +1,6 @@
+archive,bytes,sha256,source
+LOL-v1.zip,347426968,47d85314b7927470cd48c97e5c1d6c896a56d6217c8e508d0736aff2d91aadcc,official or documented mirror; see DATASETS_AND_SPLITS.md
+LOLv2-real.zip,1046491030,9820d8b112438d94d1f5d4d25817eee618a8cf4bc63a65cd6b19f5a98c3faefa,official or documented mirror; see DATASETS_AND_SPLITS.md
+LOLv2_Synthetic.rar,466012326,dcb7de5d7a7b4af5b667f1a4dbecc4523464f995fc2d39db0e2806988bda2f0d,official or documented mirror; see DATASETS_AND_SPLITS.md
+MILLs-DSLR.zip,204658447,cf14eaf7ac287a30822fd626cba76b255f39e416b95bcc089e48c7aa91503112,official or documented mirror; see DATASETS_AND_SPLITS.md
+MILLs-smartphone.zip,237535690,ec732f0d4c15fdcfca5abfc2588385a7d9050722625ffd357f7ce5e9a155db7f,official or documented mirror; see DATASETS_AND_SPLITS.md

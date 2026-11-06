@@ -6,6 +6,8 @@
 
 An intelligent, illumination-adaptive image restoration and enhancement system designed for severely underexposed, noisy, and color-distorted imagery across diverse lighting conditions. Built as a hybrid pipeline combining classical computer vision decomposition with deep learning restoration.
 
+> Current status: design/planning only; the pipeline and performance described below have not yet been implemented or verified. For the 18-hour submission with an RTX 3050 (4 GB), follow the [ML execution plan](docs/P1_ML_EXECUTION_PLAN.md), [agent contract](docs/P1_AGENT_CONTRACT.md), and [primary-source research](docs/p1_ml_research.md). The execution plan supersedes conflicting recommendations in the older plan.
+
 ---
 
 ## 📌 Problem Statement Overview
@@ -126,3 +128,7 @@ In accordance with the hackathon specification (evaluated in strict order):
 ## ⚖️ Ethics & Responsible AI Considerations
 * **Restoration vs. Hallucination**: Our non-generative hybrid approach (Retinex + HVI-CIDNet + deterministic spatial fusion) enhances authentic sensor signals rather than hallucinating artificial textures or features, ensuring suitability for forensic, security, and scientific applications.
 * **Privacy**: Uploaded images are processed strictly in-memory during interactive inference and are never stored on public servers.
+
+## Dataset protocol
+
+The original P1 benchmark collection and the later supplementary dataset are maintained as **separate datasets**. See [`DATASETS_AND_SPLITS.md`](DATASETS_AND_SPLITS.md) for the original benchmark protocol, [`SUPPLEMENTARY_DATASET_RESEARCH.md`](SUPPLEMENTARY_DATASET_RESEARCH.md) for the supplemental SMALL dataset decision and its separate evaluation rules, and [`DATA_SHARING.md`](DATA_SHARING.md) for Drive storage/sharing instructions. The downloaded images remain outside this Git repository; only code, documentation, and manifests belong here.

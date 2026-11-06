@@ -25,9 +25,9 @@
 
 | Approach | 1. PSNR (dB) ↑ | 1. SSIM ↑ | 2. LPIPS ↓ | 3. NIQE ↓ | 4. Processing Latency (ms / s) ↓ | 5a. Noise Suppression (Residual $\hat{\sigma}_{\text{MAD}}$ ↓ / Gain dB ↑) | 5b. Edge Preservation (EPI ↑) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **Classical Only (Adaptive Retinex + Luminance CLAHE)** | 17.60 | 0.5928 | 0.2710 | 3.5334 | 137.4 ms (0.137 s) | 4.11 / +1.00 dB (score 0.707) | 0.8428 |
-| **Deep Learning Only (HVI-CIDNet)** | 21.18 | 0.7356 | 0.2363 | 3.5682 | 452.6 ms (0.453 s) | 4.91 / +4.23 dB (score 0.786) | 0.8562 |
-| **Hybrid (ARHR: Classical + HVI-CIDNet + Spatial Fusion)** | 23.33 | 0.7620 | 0.2001 | 3.3485 | 700.2 ms (0.700 s) | 3.61 / +6.59 dB (score 0.838) | 0.8705 |
+| **Classical Only (Adaptive Retinex + Luminance CLAHE)** | 17.60 | 0.5928 | 0.2710 | 3.5334 | 100.1 ms (0.100 s) | 4.11 / +1.00 dB (score 0.707) | 0.8428 |
+| **Deep Learning Only (HVI-CIDNet)** | 12.38 | 0.4628 | 0.2910 | 4.1096 | 598.4 ms (0.598 s) | 1.85 / +2.66 dB (score 0.745) | 0.8445 |
+| **Hybrid (ARHR: Classical + HVI-CIDNet + Spatial Fusion)** | 14.45 | 0.5818 | 0.2507 | 3.7839 | 800.1 ms (0.800 s) | 2.64 / +1.73 dB (score 0.723) | 0.8712 |
 
 ---
 
@@ -39,8 +39,8 @@
 | Approach | PSNR (dB) ↑ | SSIM ↑ |
 |---|---:|---:|
 | Classical Only (Adaptive Retinex + Luminance CLAHE) | 17.60 | 0.5928 |
-| Deep Learning Only (HVI-CIDNet) | 21.18 | 0.7356 |
-| Hybrid (ARHR: Classical + HVI-CIDNet + Spatial Fusion) | 23.33 | 0.7620 |
+| Deep Learning Only (HVI-CIDNet) | 12.38 | 0.4628 |
+| Hybrid (ARHR: Classical + HVI-CIDNet + Spatial Fusion) | 14.45 | 0.5818 |
 
 ### Metric 2: LPIPS (Learned Perceptual Image Patch Similarity)
 - **Definition:** Deep feature perceptual distance (AlexNet backbone, lower is better) measuring human-aligned texture and perceptual fidelity.
@@ -48,8 +48,8 @@
 | Approach | LPIPS ↓ |
 |---|---:|
 | Classical Only (Adaptive Retinex + Luminance CLAHE) | 0.2710 |
-| Deep Learning Only (HVI-CIDNet) | 0.2363 |
-| Hybrid (ARHR: Classical + HVI-CIDNet + Spatial Fusion) | 0.2001 |
+| Deep Learning Only (HVI-CIDNet) | 0.2910 |
+| Hybrid (ARHR: Classical + HVI-CIDNet + Spatial Fusion) | 0.2507 |
 
 ### Metric 3: NIQE (No-Reference Image Quality Metric)
 - **Definition:** Natural Image Quality Evaluator based on Mean Subtracted Contrast Normalized (MSCN) Natural Scene Statistics (lower is better).
@@ -57,17 +57,17 @@
 | Approach | NIQE ↓ |
 |---|---:|
 | Classical Only (Adaptive Retinex + Luminance CLAHE) | 3.5334 |
-| Deep Learning Only (HVI-CIDNet) | 3.5682 |
-| Hybrid (ARHR: Classical + HVI-CIDNet + Spatial Fusion) | 3.3485 |
+| Deep Learning Only (HVI-CIDNet) | 4.1096 |
+| Hybrid (ARHR: Classical + HVI-CIDNet + Spatial Fusion) | 3.7839 |
 
 ### Metric 4: Processing Latency
 - **Definition:** Mean end-to-end processing time per image in milliseconds and seconds (lower is better; must remain well under the $< 10\text{ s}$ live deployment requirement).
 
 | Approach | Mean Latency (ms) ↓ | Mean Latency (s) ↓ | Meets $< 10\text{ s}$ Rubric Target |
 |---|---:|---:|:---:|
-| Classical Only (Adaptive Retinex + Luminance CLAHE) | 137.39 ms | 0.137 s | Yes |
-| Deep Learning Only (HVI-CIDNet) | 452.61 ms | 0.453 s | Yes |
-| Hybrid (ARHR: Classical + HVI-CIDNet + Spatial Fusion) | 700.15 ms | 0.700 s | Yes |
+| Classical Only (Adaptive Retinex + Luminance CLAHE) | 100.09 ms | 0.100 s | Yes |
+| Deep Learning Only (HVI-CIDNet) | 598.41 ms | 0.598 s | Yes |
+| Hybrid (ARHR: Classical + HVI-CIDNet + Spatial Fusion) | 800.06 ms | 0.800 s | Yes |
 
 ### Metric 5: Noise Suppression and Edge Preservation
 - **Noise Suppression Definition:** High-frequency diagonal wavelet Median Absolute Deviation ($\hat{\sigma}_{\text{MAD}} = \text{median}(|W_{HH}|)/0.6745$) measured in homogeneous shadow regions (lower residual $\hat{\sigma}_{\text{MAD}}$ and higher gain-normalized suppression dB are better).
@@ -76,8 +76,8 @@
 | Approach | Residual Shadow Noise $\hat{\sigma}_{\text{MAD}}$ ↓ | Gain-Normalized Noise Suppression (dB) ↑ | Noise Cleanliness Score $[0,1]$ ↑ | Edge Preservation Index (EPI) ↑ |
 |---|---:|---:|---:|---:|
 | Classical Only (Adaptive Retinex + Luminance CLAHE) | 4.11 | +1.00 dB | 0.707 | 0.8428 |
-| Deep Learning Only (HVI-CIDNet) | 4.91 | +4.23 dB | 0.786 | 0.8562 |
-| Hybrid (ARHR: Classical + HVI-CIDNet + Spatial Fusion) | 3.61 | +6.59 dB | 0.838 | 0.8705 |
+| Deep Learning Only (HVI-CIDNet) | 1.85 | +2.66 dB | 0.745 | 0.8445 |
+| Hybrid (ARHR: Classical + HVI-CIDNet + Spatial Fusion) | 2.64 | +1.73 dB | 0.723 | 0.8712 |
 
 ---
 
@@ -87,7 +87,7 @@
 
 | Approach | 1. PSNR (dB) ↑ | 1. SSIM ↑ | 2. LPIPS ↓ | 3. NIQE ↓ | 4. Processing Latency (ms / s) ↓ | 5a. Noise Suppression (Residual $\hat{\sigma}_{\text{MAD}}$ ↓ / Gain dB ↑) | 5b. Edge Preservation (EPI ↑) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **Hybrid (ARHR on Unseen Unpaired Inputs)** | N/A (Unpaired) | N/A (Unpaired) | N/A (Unpaired) | 3.3485 | 700.2 ms (0.700 s) | 3.61 / +6.59 dB (score 0.838) | 0.8039 |
+| **Hybrid (ARHR on Unseen Unpaired Inputs)** | N/A (Unpaired) | N/A (Unpaired) | N/A (Unpaired) | 3.7839 | 800.1 ms (0.800 s) | 2.64 / +1.73 dB (score 0.723) | 0.9351 |
 
 ---
 
@@ -97,12 +97,12 @@
 
 | Experiment / Configuration | 1. PSNR (dB) ↑ | 1. SSIM ↑ | 2. LPIPS ↓ | 3. NIQE ↓ | 4. Latency (ms) ↓ | 5a. Shadow Noise $\hat{\sigma}_{\text{MAD}}$ ↓ | 5b. Edge Preservation (EPI ↑) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| Exp A: Classical CV Only (Fixed Parameters) | 17.16 | 0.5308 | 0.3632 | 3.6527 | 189.8 | 5.70 | 0.7807 |
-| Exp B: Classical CV Only (Adaptive Parameters) | 17.60 | 0.5928 | 0.2710 | 3.5334 | 137.4 | 4.11 | 0.8428 |
-| Exp C: Deep Learning Only (HVI-CIDNet) | 21.18 | 0.7356 | 0.2363 | 3.5682 | 452.6 | 4.91 | 0.8562 |
-| Exp D: Classical + Deep (Uniform 50/50 Blend) | 22.87 | 0.7222 | 0.1983 | 3.4071 | 605.2 | 5.27 | 0.8830 |
-| Exp E: Illumination-Guided Spatial Fusion | 23.00 | 0.7453 | 0.1948 | 3.3455 | 679.0 | 3.94 | 0.8735 |
-| Exp F: Full ARHR Hybrid (Illum + Noise + Edge + Quality Guard) | 23.33 | 0.7620 | 0.2001 | 3.3485 | 700.2 | 3.61 | 0.8705 |
+| Exp A: Classical CV Only (Fixed Parameters) | 17.16 | 0.5308 | 0.3632 | 3.6527 | 120.7 | 5.70 | 0.7807 |
+| Exp B: Classical CV Only (Adaptive Parameters) | 17.60 | 0.5928 | 0.2710 | 3.5334 | 100.1 | 4.11 | 0.8428 |
+| Exp C: Deep Learning Only (HVI-CIDNet) | 12.38 | 0.4628 | 0.2910 | 4.1096 | 598.4 | 1.85 | 0.8445 |
+| Exp D: Classical + Deep (Uniform 50/50 Blend) | 14.86 | 0.5836 | 0.2525 | 3.7407 | 715.1 | 3.00 | 0.8742 |
+| Exp E: Illumination-Guided Spatial Fusion | 14.01 | 0.5818 | 0.2281 | 3.7470 | 764.5 | 1.10 | 0.8675 |
+| Exp F: Full ARHR Hybrid (Illum + Noise + Edge + Quality Guard) | 14.45 | 0.5818 | 0.2507 | 3.7839 | 800.1 | 2.64 | 0.8712 |
 
 ---
 

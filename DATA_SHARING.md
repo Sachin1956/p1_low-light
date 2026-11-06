@@ -32,10 +32,10 @@ The team Drive folder supplied by the user is: [P1 datasets](https://drive.googl
 The supplementary dataset is SMALL v1.0.0 and is **separate** from the original P1 dataset folder. Research and usage rules are documented in `SUPPLEMENTARY_DATASET_RESEARCH.md`. The download/package location is:
 
 ```text
-C:\Users\rohit\Documents\ChatGPT\P1-supplementary-datasets-upload
+C:\Users\rohit\Documents\ChatGPT\P1-supplementary-dataset-upload
 ```
 
-Upload this folder separately to Drive as `P1-supplementary-SMALL`; do not place it inside or merge it with the existing `P1-datasets` Drive folder. Keep its own README, archive, extracted files, official split files, and CC BY 4.0 attribution together. Use its official splits and report metrics separately.
+This upload-ready folder contains the extracted SMALL v1.0.0 release, its official README/license/checksums/split files, and a top-level package README. It is separate from the source-download cache. Upload this folder separately to Drive as `P1-supplementary-SMALL`; do not place it inside or merge it with the existing `P1-datasets` Drive folder. Use its official splits and report metrics separately.
 
 1. Open [Google Drive](https://drive.google.com/) and create a folder such as `P1-datasets`.
 2. Choose **New → Folder upload** and select `C:\Users\rohit\Documents\ChatGPT\P1-datasets-upload`.

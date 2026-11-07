@@ -1,3 +1,14 @@
+---
+title: P1 Robust Low-Light Image Restoration
+emoji: 💡
+colorFrom: blue
+colorTo: indigo
+sdk: gradio
+app_file: app.py
+pinned: false
+license: mit
+---
+
 # P1: Robust Low-Light Image Restoration and Enhancement
 
 [![Hackathon](https://img.shields.io/badge/Computer%20Vision%20Hackathon-2026-blue)](docs/Computer%20Vision%20Hackathon%202026.pdf)

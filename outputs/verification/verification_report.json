@@ -18,26 +18,26 @@
         "underexposed_pct": 0.11
       },
       "deep": {
-        "mean_luma": 0.5307,
-        "std_contrast": 0.1228,
-        "noise_mad": 0.0814,
-        "edge_energy": 0.1036,
+        "mean_luma": 0.5381,
+        "std_contrast": 0.1165,
+        "noise_mad": 0.064,
+        "edge_energy": 0.0999,
         "clipped_pct": 0.0,
         "underexposed_pct": 0.0
       },
       "hybrid": {
-        "mean_luma": 0.4563,
-        "std_contrast": 0.104,
-        "noise_mad": 0.2674,
-        "edge_energy": 0.2678,
+        "mean_luma": 0.4604,
+        "std_contrast": 0.1007,
+        "noise_mad": 0.2558,
+        "edge_energy": 0.2663,
         "clipped_pct": 0.0,
         "underexposed_pct": 0.0
       },
       "no_guard": {
-        "mean_luma": 0.4563,
-        "std_contrast": 0.104,
-        "noise_mad": 0.2674,
-        "edge_energy": 0.2678,
+        "mean_luma": 0.4604,
+        "std_contrast": 0.1007,
+        "noise_mad": 0.2558,
+        "edge_energy": 0.2663,
         "clipped_pct": 0.0,
         "underexposed_pct": 0.0
       }
@@ -64,26 +64,26 @@
         "underexposed_pct": 0.94
       },
       "deep": {
-        "mean_luma": 0.4433,
-        "std_contrast": 0.2213,
-        "noise_mad": 0.0523,
-        "edge_energy": 0.0836,
-        "clipped_pct": 4.12,
+        "mean_luma": 0.4157,
+        "std_contrast": 0.2224,
+        "noise_mad": 0.0349,
+        "edge_energy": 0.0732,
+        "clipped_pct": 5.45,
         "underexposed_pct": 0.0
       },
       "hybrid": {
-        "mean_luma": 0.3881,
-        "std_contrast": 0.1566,
-        "noise_mad": 0.1977,
-        "edge_energy": 0.2155,
+        "mean_luma": 0.371,
+        "std_contrast": 0.1572,
+        "noise_mad": 0.1919,
+        "edge_energy": 0.2081,
         "clipped_pct": 0.42,
         "underexposed_pct": 0.0
       },
       "no_guard": {
-        "mean_luma": 0.3885,
-        "std_contrast": 0.1577,
-        "noise_mad": 0.1977,
-        "edge_energy": 0.2156,
+        "mean_luma": 0.3714,
+        "std_contrast": 0.1583,
+        "noise_mad": 0.1919,
+        "edge_energy": 0.2082,
         "clipped_pct": 0.42,
         "underexposed_pct": 0.0
       }
@@ -110,26 +110,26 @@
         "underexposed_pct": 0.0
       },
       "deep": {
-        "mean_luma": 0.4117,
-        "std_contrast": 0.0317,
-        "noise_mad": 0.0116,
-        "edge_energy": 0.0188,
+        "mean_luma": 0.464,
+        "std_contrast": 0.0261,
+        "noise_mad": 0.0058,
+        "edge_energy": 0.0222,
         "clipped_pct": 0.0,
         "underexposed_pct": 0.0
       },
       "hybrid": {
-        "mean_luma": 0.3651,
-        "std_contrast": 0.0348,
+        "mean_luma": 0.3901,
+        "std_contrast": 0.0333,
         "noise_mad": 0.1279,
-        "edge_energy": 0.1269,
+        "edge_energy": 0.1275,
         "clipped_pct": 0.0,
         "underexposed_pct": 0.0
       },
       "no_guard": {
-        "mean_luma": 0.3651,
-        "std_contrast": 0.0348,
+        "mean_luma": 0.3901,
+        "std_contrast": 0.0333,
         "noise_mad": 0.1279,
-        "edge_energy": 0.1269,
+        "edge_energy": 0.1275,
         "clipped_pct": 0.0,
         "underexposed_pct": 0.0
       }
@@ -156,26 +156,26 @@
         "underexposed_pct": 0.36
       },
       "deep": {
-        "mean_luma": 0.4593,
-        "std_contrast": 0.0833,
-        "noise_mad": 0.1454,
-        "edge_energy": 0.2181,
+        "mean_luma": 0.4376,
+        "std_contrast": 0.0766,
+        "noise_mad": 0.1163,
+        "edge_energy": 0.1989,
         "clipped_pct": 0.0,
         "underexposed_pct": 0.0
       },
       "hybrid": {
-        "mean_luma": 0.4207,
-        "std_contrast": 0.1159,
-        "noise_mad": 0.3198,
-        "edge_energy": 0.3743,
+        "mean_luma": 0.4072,
+        "std_contrast": 0.112,
+        "noise_mad": 0.3023,
+        "edge_energy": 0.3613,
         "clipped_pct": 0.0,
         "underexposed_pct": 0.0
       },
       "no_guard": {
-        "mean_luma": 0.4207,
-        "std_contrast": 0.1159,
-        "noise_mad": 0.3198,
-        "edge_energy": 0.3743,
+        "mean_luma": 0.4072,
+        "std_contrast": 0.112,
+        "noise_mad": 0.3023,
+        "edge_energy": 0.3613,
         "clipped_pct": 0.0,
         "underexposed_pct": 0.0
       }
@@ -202,26 +202,26 @@
         "underexposed_pct": 0.0
       },
       "deep": {
-        "mean_luma": 0.7692,
-        "std_contrast": 0.1881,
+        "mean_luma": 0.7079,
+        "std_contrast": 0.1754,
         "noise_mad": 0.0174,
-        "edge_energy": 0.0262,
+        "edge_energy": 0.0247,
         "clipped_pct": 0.0,
         "underexposed_pct": 0.0
       },
       "hybrid": {
-        "mean_luma": 0.6471,
-        "std_contrast": 0.1467,
+        "mean_luma": 0.6336,
+        "std_contrast": 0.1464,
         "noise_mad": 0.0407,
-        "edge_energy": 0.0482,
+        "edge_energy": 0.0479,
         "clipped_pct": 0.0,
         "underexposed_pct": 0.0
       },
       "no_guard": {
-        "mean_luma": 0.6471,
-        "std_contrast": 0.1467,
+        "mean_luma": 0.6336,
+        "std_contrast": 0.1464,
         "noise_mad": 0.0407,
-        "edge_energy": 0.0482,
+        "edge_energy": 0.0479,
         "clipped_pct": 0.0,
         "underexposed_pct": 0.0
       }

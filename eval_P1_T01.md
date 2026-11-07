@@ -2,6 +2,20 @@
 
 # Comparative Evaluation Results — Problem Statement 1 (`eval_P1_T01`)
 
+The [submission benchmark](outputs/submission/summary.md) uses the deployed app settings on all 100 LOL-v2 Real test inputs and scores saved predictions in a separate pass. The tables below preserve the earlier development results and ablations. The legacy scorer permitted LPIPS/NIQE approximations, so use the new benchmark for standard metric comparisons. The [submission runbook](docs/P1_SUBMISSION_RUNBOOK.md) documents the current protocol and failure artifacts.
+
+## Submission comparison · LOL-v2 Real official test
+
+| Approach | 1. RGB PSNR ↑ | 1. SSIM ↑ | 2. LPIPS Alex ↓ | 3. NIQE ↓ | 4. Processing latency | 5a. Shadow MAD ↓ | 5b. Paired edge correlation ↑ |
+|---|---:|---:|---:|---:|---|---:|---:|
+| Classical | 15.9323 | 0.3951 | 0.4944 | 8.9771 | Shared request | 15.2261 | 0.7414 |
+| Deep | 20.0330 | 0.8444 | 0.1559 | 4.4125 | Shared request | 1.0600 | 0.8765 |
+| Adaptive hybrid | 21.5660 | 0.7623 | 0.1923 | 6.4309 | Shared request | 4.3143 | 0.8712 |
+
+Hybrid PSNR improved by 1.53 dB over deep-only, with a paired ID bootstrap 95% interval of +0.87 to +2.19 dB. Deep-only leads on SSIM, LPIPS, NIQE, shadow noise and edge correlation. The full hybrid exceeds the plan's SSIM and LPIPS regression tolerances. The report therefore shows a PSNR tradeoff across metrics rather than a hybrid win on every gate. All 300 predictions were saved and hashed before the paired references were downloaded. Five test inputs previously appeared in the input-only checkpoint handoff.
+
+One CPU request computes all three outputs and four maps. Native-size decode, processing and PNG writes took 1.95 s median, 4.36 s p95 and 5.95 s maximum. The separate public API audit completed 20 of 20 uploads and downloads, with 11.26 s median, 12.80 s p95 and 13.12 s maximum. Nine requests took less than 10 s. See [per-image scores](outputs/submission/scores.json), [prediction provenance](outputs/submission/inference.json), [public latency](outputs/submission/hosted_latency.json) and [inspected failure cases](outputs/submission/failures.md).
+
 ## Team Members
 | Name | USN |
 |---|---|
@@ -123,10 +137,10 @@
 
 ---
 
-## 6. Live Deployment & Latency SLA Release Gate Verification
-Per Section 8 of the P1 Execution Plan and Agent Contract, the live system underwent an automated 20-image stress audit (`tools/audit_live_latency.py`) following 3 warmup cycles across varied dimensions and extreme light/noise conditions:
+## 6. Earlier local callback timing on synthetic inputs
+The earlier 20-image audit (`tools/audit_live_latency.py`) called the app handler directly after three warmups. It measured local processing on synthetic arrays. Hosted upload and downloads are recorded separately in `outputs/submission/hosted_latency.json`.
 
-- **Total Live Inferences**: 20 / 20 successful
+- **Total local handler calls**: 20 / 20 successful
 - **Zero Crashes**: **PASS** (0 crashes observed)
 - **Zero OOM Exceptions**: **PASS** (0 memory errors observed)
 - **All Inferences < 10.0 s Target**: **PASS** (100% under SLA threshold)

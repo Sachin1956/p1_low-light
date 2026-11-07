@@ -6,7 +6,7 @@
 
 An intelligent, illumination-adaptive image restoration and enhancement system designed for severely underexposed, noisy, and color-distorted imagery across diverse lighting conditions. Built as a hybrid pipeline combining classical computer vision decomposition with deep learning restoration.
 
-> **Status: IMPLEMENTED & VERIFIED.** The ARHR hybrid system is fully implemented and verified against the hackathon requirements. Quantitative results (Adapted Deep Learning: 27.52 dB PSNR, 0.9002 SSIM; Adaptive Hybrid: 22.91 dB PSNR, 0.8062 SSIM on LOL-v2 Real) and ablations ($E0 - E8$) are documented in [`eval_P1_T01.md`](eval_P1_T01.md). The interactive Gradio application satisfies the $< 10\text{ s}$ SLA (certified at 3.00s median latency across 20 varied live scenes with zero OOM errors and zero crashes in [`outputs/live_latency_audit.json`](outputs/live_latency_audit.json)).
+> The interactive app runs classical, deep and adaptive hybrid restoration on one upload and displays the illumination, noise, edge and fusion maps from that request. See the [submission runbook](docs/P1_SUBMISSION_RUNBOOK.md) for launch and evaluation commands and [`eval_P1_T01.md`](eval_P1_T01.md) for comparative results. The earlier `live_latency_audit.json` measured direct calls on synthetic images. Hosted request timing is recorded separately.
 
 ---
 
@@ -106,7 +106,7 @@ In accordance with the hackathon specification (evaluated in strict order):
 * [x] Adaptive hybrid fusion module (`p1/fusion.py`)
 * [x] Evaluation suite and mandatory results file ([`eval_P1_T01.md`](eval_P1_T01.md))
 * [x] Ablation study ($E0 - E8$) and documented failure cases (in [`eval_P1_T01.md`](eval_P1_T01.md))
-* [x] Interactive web application with $<10\text{ s}$ SLA certified ([`app.py`](app.py) & [`outputs/live_latency_audit.json`](outputs/live_latency_audit.json))
+* [x] Interactive web application with an image comparison and map inspector ([`app.py`](app.py))
 * [x] One-command execution scripts (`run_app.bat` and `run_app.sh`)
 
 ---
@@ -125,6 +125,8 @@ bash run_app.sh
 python app.py --port 7860
 ```
 Open [http://localhost:7860](http://localhost:7860) in your browser.
+
+For a temporary public demo, run `python app.py --share` and use the HTTPS URL printed by Gradio. Keep the host process running. See the [submission runbook](docs/P1_SUBMISSION_RUNBOOK.md) for the public check and evidence files.
 
 ---
 

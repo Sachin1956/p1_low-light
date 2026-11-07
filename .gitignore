@@ -33,3 +33,4 @@ Thumbs.db
 tmp/
 outputs/tmp/
 .gradio/
+.vercel

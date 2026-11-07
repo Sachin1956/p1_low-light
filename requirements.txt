@@ -6,6 +6,6 @@ Pillow>=10.0.0
 torch>=2.0.0
 torchvision>=0.15.0
 lpips>=0.1.4
-gradio>=4.0.0
+gradio==6.31.0
 tqdm>=4.65.0
 matplotlib>=3.7.0

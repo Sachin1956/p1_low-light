@@ -1,0 +1,23 @@
+{
+  "transport": "Gradio HTTP API with image upload and seven image downloads",
+  "smoke": true,
+  "successful": 1,
+  "total": 1,
+  "warmups": 1,
+  "median_seconds": 29.027070399999957,
+  "p95_seconds": 29.027070399999957,
+  "max_seconds": 29.027070399999957,
+  "all_under_10_seconds": false,
+  "records": [
+    {
+      "input": "handoff_2_streetlight.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 29.027070399999957,
+      "distinct_restorations": 3,
+      "status": "ok"
+    }
+  ]
+}

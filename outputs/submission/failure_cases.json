@@ -1,0 +1,41 @@
+[
+  {
+    "criterion": "lowest hybrid PSNR",
+    "pair_id": "00703",
+    "crop": [
+      253,
+      35,
+      381,
+      163
+    ],
+    "hybrid_psnr": 14.385406904931523,
+    "deep_psnr": 16.334905849583265,
+    "new_clipping_pct": 0.0
+  },
+  {
+    "criterion": "largest hybrid PSNR drop versus deep",
+    "pair_id": "00707",
+    "crop": [
+      40,
+      125,
+      168,
+      253
+    ],
+    "hybrid_psnr": 19.95098659699781,
+    "deep_psnr": 29.202216672307216,
+    "new_clipping_pct": 0.0
+  },
+  {
+    "criterion": "largest fraction of newly near-clipped pixels",
+    "pair_id": "00759",
+    "crop": [
+      0,
+      160,
+      128,
+      288
+    ],
+    "hybrid_psnr": 18.94395191998711,
+    "deep_psnr": 16.815807892225678,
+    "new_clipping_pct": 0.14166666666666666
+  }
+]

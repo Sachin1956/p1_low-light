@@ -1,0 +1,233 @@
+{
+  "transport": "Gradio HTTP API with image upload and seven concurrent image downloads",
+  "smoke": false,
+  "successful": 20,
+  "total": 20,
+  "warmups": 3,
+  "median_seconds": 11.260136250000073,
+  "p95_seconds": 12.799527385000056,
+  "max_seconds": 13.119365499999958,
+  "all_under_10_seconds": false,
+  "records": [
+    {
+      "input": "00690.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 9.370709499999975,
+      "output_ready_seconds": 7.175171699999964,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00695.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 9.032344800000146,
+      "output_ready_seconds": 6.952690400000165,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00700.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 11.263023100000055,
+      "output_ready_seconds": 9.345481999999947,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00705.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 9.25705579999999,
+      "output_ready_seconds": 6.940414899999951,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00710.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 11.257249400000092,
+      "output_ready_seconds": 9.178902000000107,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00715.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 9.650901600000225,
+      "output_ready_seconds": 7.286665700000185,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00720.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 13.119365499999958,
+      "output_ready_seconds": 11.040857999999844,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00725.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 9.007389500000045,
+      "output_ready_seconds": 6.7380046000000675,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00730.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 8.968623699999853,
+      "output_ready_seconds": 7.167404499999975,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00735.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 9.780837799999972,
+      "output_ready_seconds": 7.347658200000069,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00740.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 9.310585599999968,
+      "output_ready_seconds": 7.032841899999994,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00745.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 9.218919099999994,
+      "output_ready_seconds": 7.106584300000122,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00750.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 11.665245599999935,
+      "output_ready_seconds": 9.464555999999902,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00755.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 11.957867400000168,
+      "output_ready_seconds": 9.423109999999951,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00760.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 12.782693800000061,
+      "output_ready_seconds": 10.666921699999875,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00765.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 12.149011900000005,
+      "output_ready_seconds": 9.738916999999901,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00770.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 12.307028500000115,
+      "output_ready_seconds": 10.222214600000143,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00775.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 12.377263599999878,
+      "output_ready_seconds": 9.923900599999797,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00780.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 11.85318519999987,
+      "output_ready_seconds": 9.999319600000035,
+      "distinct_restorations": 3,
+      "status": "ok"
+    },
+    {
+      "input": "00785.png",
+      "size": [
+        600,
+        400
+      ],
+      "seconds": 11.754481099999794,
+      "output_ready_seconds": 9.409438999999793,
+      "distinct_restorations": 3,
+      "status": "ok"
+    }
+  ]
+}

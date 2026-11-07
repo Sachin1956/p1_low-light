@@ -1,0 +1,23 @@
+FROM python:3.13-slim
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    GRADIO_ANALYTICS_ENABLED=False \
+    GRADIO_TEMP_DIR=/tmp/p1-gradio
+
+WORKDIR /app
+COPY requirements-vercel.txt ./
+RUN pip install --no-cache-dir -r requirements-vercel.txt
+
+COPY app.py ./
+COPY p1/ ./p1/
+COPY external/HVI-CIDNet/net/ ./external/HVI-CIDNet/net/
+COPY external/HVI-CIDNet/LICENSE ./external/HVI-CIDNet/LICENSE
+COPY weights/kaggle_run_v3/p1_multidataset_output/best_model.pth ./weights/kaggle_run_v3/p1_multidataset_output/best_model.pth
+RUN echo 'fca75a6fc3a24fa3ef63e9dfa0562f3143e949a1554a34d4016acb8efe8061d5  weights/kaggle_run_v3/p1_multidataset_output/best_model.pth' | sha256sum -c -
+COPY data/handoff_fixtures/ ./data/handoff_fixtures/
+COPY outputs/submission/summary.md outputs/submission/failures.md ./outputs/submission/
+COPY LICENSE ./
+
+EXPOSE 80
+CMD ["sh", "-c", "exec python app.py --host 0.0.0.0 --port \"${PORT:-80}\" --max-file-size 4mb"]

@@ -31,10 +31,19 @@ from p1.interface import (
 )
 
 _REPO_ROOT = Path(__file__).resolve().parent
-_CKPT_PATH = _REPO_ROOT / "weights" / "kaggle_run_v2" / "p1_kaggle_output" / "best_model.pth"
+v3_ckpt = _REPO_ROOT / "weights" / "kaggle_run_v3" / "p1_multidataset_output" / "best_model.pth"
+v2_ckpt = _REPO_ROOT / "weights" / "kaggle_run_v2" / "p1_kaggle_output" / "best_model.pth"
+_CKPT_PATH = v3_ckpt if v3_ckpt.exists() else v2_ckpt
 if not _CKPT_PATH.exists():
     # Fallback to pretrained
     _CKPT_PATH = _REPO_ROOT / "weights" / "cidnet" / "CIDNETweights" / "lolv2" / "best_PSNR.pth"
+
+# Pre-warm model checkpoint into memory during server initialization
+from p1.deep_adapter import load_cidnet_model
+try:
+    load_cidnet_model(_CKPT_PATH, device="cpu")
+except Exception as e:
+    print(f"Notice: pre-warming model: {e}")
 
 
 def _colorize_map(f32_map: np.ndarray, colormap: int = cv2.COLORMAP_VIRIDIS) -> np.ndarray:
@@ -61,9 +70,25 @@ def process_image(
     if input_img is None:
         return None, None, None, None, None, None, None, "Please upload or select an input image."
 
-    # Validate shape & type
-    if input_img.ndim != 3 or input_img.shape[2] != 3:
+    # Validate shape & type (handles grayscale, RGBA, and standard sRGB)
+    if input_img.ndim == 2:
+        input_img = np.stack([input_img, input_img, input_img], axis=-1)
+    elif input_img.ndim == 3 and input_img.shape[2] == 4:
+        rgb = input_img[..., :3].astype(np.float32)
+        alpha = (input_img[..., 3:4].astype(np.float32) / 255.0).clip(0.0, 1.0)
+        input_img = np.clip(np.round(rgb * alpha), 0, 255).astype(np.uint8)
+    elif input_img.ndim != 3 or input_img.shape[2] != 3:
         return None, None, None, None, None, None, None, f"Invalid image format: {input_img.shape}"
+
+    orig_h, orig_w, _ = input_img.shape
+
+    # Section 8 live mode resolution policy: max long side 768 preserving aspect ratio
+    MAX_LONG_SIDE = 768
+    if max(orig_h, orig_w) > MAX_LONG_SIDE:
+        scale = MAX_LONG_SIDE / float(max(orig_h, orig_w))
+        new_w = int(round(orig_w * scale))
+        new_h = int(round(orig_h * scale))
+        input_img = cv2.resize(input_img, (new_w, new_h), interpolation=cv2.INTER_AREA)
 
     h, w, _ = input_img.shape
 
@@ -80,35 +105,41 @@ def process_image(
     res_d = enhance(input_img, cfg_d)
     t_d = (time.perf_counter() - t0) * 1000.0
 
-    # 3. Hybrid run
-    cfg_h = EnhancementConfig(
+    # 3. Hybrid run (fuse computed Classical and Deep candidates directly)
+    from p1.fusion import adaptive_fusion
+    t0 = time.perf_counter()
+    hybrid_u8, f_maps, f_params, t_fuse = adaptive_fusion(
+        input_img,
+        res_c.image,
+        res_d.image,
+        res_c.maps,
         mode=fusion_mode,
-        checkpoint_path=str(_CKPT_PATH),
-        device="cpu",
-        classical_adaptive=adaptive_classical,
         quality_guard=enable_quality_guard,
     )
-    t0 = time.perf_counter()
-    res_h = enhance(input_img, cfg_h)
     t_h = (time.perf_counter() - t0) * 1000.0
 
+    all_maps = dict(res_c.maps)
+    all_maps.update(f_maps)
+
     # Format analysis maps
-    illum_vis = _colorize_map(res_h.maps.get("illumination", np.zeros((h, w), dtype=np.float32)), cv2.COLORMAP_INFERNO)
-    noise_vis = _colorize_map(res_h.maps.get("noise_map", np.zeros((h, w), dtype=np.float32)), cv2.COLORMAP_HOT)
-    edge_vis = _colorize_map(res_h.maps.get("edge_map", np.zeros((h, w), dtype=np.float32)), cv2.COLORMAP_MAGMA)
+    illum_vis = _colorize_map(all_maps.get("illumination", np.zeros((h, w), dtype=np.float32)), cv2.COLORMAP_INFERNO)
+    noise_vis = _colorize_map(all_maps.get("noise_map", np.zeros((h, w), dtype=np.float32)), cv2.COLORMAP_HOT)
+    edge_vis = _colorize_map(all_maps.get("edge_map", np.zeros((h, w), dtype=np.float32)), cv2.COLORMAP_MAGMA)
 
     # Colorize RGB weights map (R=Original, G=Classical, B=Deep)
-    w_o = res_h.maps.get("weight_orig", np.zeros((h, w), dtype=np.float32))
-    w_c = res_h.maps.get("weight_classical", np.zeros((h, w), dtype=np.float32))
-    w_d = res_h.maps.get("weight_deep", np.zeros((h, w), dtype=np.float32))
+    w_o = all_maps.get("weight_orig", np.zeros((h, w), dtype=np.float32))
+    w_c = all_maps.get("weight_classical", np.zeros((h, w), dtype=np.float32))
+    w_d = all_maps.get("weight_deep", np.zeros((h, w), dtype=np.float32))
     fusion_weights_rgb = np.stack([
         np.clip(w_o * 255.0, 0, 255).astype(np.uint8),
         np.clip(w_c * 255.0, 0, 255).astype(np.uint8),
         np.clip(w_d * 255.0, 0, 255).astype(np.uint8),
     ], axis=-1)
 
+    res_info = f"{orig_w}x{orig_h} px (scaled to {w}x{h} px to enforce <10s live SLA)" if (orig_w != w or orig_h != h) else f"{w}x{h} px"
+
     diag = f"""### Execution Diagnostics
-- **Resolution**: {w}x{h} px
+- **Resolution**: {res_info}
 - **Classical Latency**: {t_c:.1f} ms (selected gamma: {res_c.params.get('selected_gamma', 'N/A')}, CLAHE clip: {res_c.params.get('selected_clahe_clip', 'N/A')})
 - **Deep Model Latency**: {t_d:.1f} ms (Checkpoint: `{Path(str(_CKPT_PATH)).name}`, SHA: `{res_d.checkpoint_hash[:12] if res_d.checkpoint_hash else 'N/A'}`)
 - **Hybrid Fusion Latency**: {t_h:.1f} ms
@@ -119,7 +150,7 @@ def process_image(
     return (
         res_c.image,
         res_d.image,
-        res_h.image,
+        hybrid_u8,
         illum_vis,
         noise_vis,
         edge_vis,
@@ -129,8 +160,10 @@ def process_image(
 
 
 def create_app() -> gr.Blocks:
-    # Gather sample images from test set if available
-    sample_dir = _REPO_ROOT / "data" / "LOLv2-real" / "LOL-v2" / "Real_captured" / "Test" / "Low"
+    # Gather sample images from handoff fixtures or test set
+    sample_dir = _REPO_ROOT / "data" / "handoff_fixtures"
+    if not sample_dir.exists() or not list(sample_dir.glob("*.png")):
+        sample_dir = _REPO_ROOT / "data" / "LOLv2-real" / "LOL-v2" / "Real_captured" / "Test" / "Low"
     examples: List[str] = []
     if sample_dir.exists():
         examples = [str(p) for p in sorted(sample_dir.glob("*.png"))[:5]]
@@ -140,7 +173,7 @@ def create_app() -> gr.Blocks:
     .header-box { text-align: center; margin-bottom: 1.5rem; }
     """
 
-    with gr.Blocks(title="P1: Low-Light Restoration & Enhancement", css=custom_css) as demo:
+    with gr.Blocks(title="P1: Low-Light Restoration & Enhancement") as demo:
         with gr.Column(elem_classes=["header-box"]):
             gr.Markdown("# 🌙 P1: Robust Low-Light Image Restoration & Enhancement")
             gr.Markdown("**Adaptive Retinex–HVI Restoration (ARHR) System** | Hackathon P1 Submission")
@@ -205,5 +238,14 @@ def create_app() -> gr.Blocks:
 
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="P1 Low-Light Interactive Application")
+    parser.add_argument("--share", action="store_true", help="Generate public shareable Gradio link")
+    parser.add_argument("--port", type=int, default=7860, help="Local server port")
+    parser.add_argument("--host", type=str, default="0.0.0.0", help="Server host IP")
+    args = parser.parse_args()
+
+    print(f"Creating Gradio UI...")
     app = create_app()
-    app.launch(share=False)
+    print(f"Launching application on {args.host}:{args.port} (share={args.share})...", flush=True)
+    app.launch(share=args.share, server_name=args.host, server_port=args.port)

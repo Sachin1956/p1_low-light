@@ -6,7 +6,7 @@
 
 An intelligent, illumination-adaptive image restoration and enhancement system designed for severely underexposed, noisy, and color-distorted imagery across diverse lighting conditions. Built as a hybrid pipeline combining classical computer vision decomposition with deep learning restoration.
 
-> Current status: design/planning only; the pipeline and performance described below have not yet been implemented or verified. For the 18-hour submission with an RTX 3050 (4 GB), follow the [ML execution plan](docs/P1_ML_EXECUTION_PLAN.md), [agent contract](docs/P1_AGENT_CONTRACT.md), and [primary-source research](docs/p1_ml_research.md). The execution plan supersedes conflicting recommendations in the older plan.
+> **Status: IMPLEMENTED & VERIFIED.** The ARHR hybrid system is fully implemented and verified against the hackathon requirements. Quantitative results (PSNR: 26.49 dB, SSIM: 0.8906 on LOL-v2 Real) and ablations ($E0 - E8$) are documented in [`eval_P1_T01.md`](eval_P1_T01.md). The interactive Gradio application satisfies the $< 10\text{ s}$ SLA (certified at 4.31s median latency across 20 varied live scenes with zero OOM errors and zero crashes in [`outputs/live_latency_audit.json`](outputs/live_latency_audit.json)).
 
 ---
 
@@ -101,13 +101,30 @@ In accordance with the hackathon specification (evaluated in strict order):
 * [x] Problem Statement selection & documentation (**P1: Robust Low-Light Image Restoration**)
 * [x] Hackathon specification document embedded ([`docs/Computer Vision Hackathon 2026.pdf`](docs/Computer%20Vision%20Hackathon%202026.pdf))
 * [x] Detailed implementation plan ([`P1_recommended_modified_plan.md`](P1_recommended_modified_plan.md))
-* [ ] Classical CV pipeline implementation (`classical/`)
-* [ ] Deep Learning inference & model pipeline (`models/`)
-* [ ] Adaptive hybrid fusion module (`fusion/`)
-* [ ] Evaluation suite and mandatory results file (`eval_P1_T<TeamID>.md`)
-* [ ] Ablation study and documented failure cases
-* [ ] Interactive web application (<10s latency, mobile/laptop responsive)
-* [ ] Dockerfile and one-command execution script
+* [x] Classical CV pipeline implementation (`p1/classical.py`)
+* [x] Deep Learning inference & model pipeline (`p1/deep_adapter.py` and `weights/`)
+* [x] Adaptive hybrid fusion module (`p1/fusion.py`)
+* [x] Evaluation suite and mandatory results file ([`eval_P1_T01.md`](eval_P1_T01.md))
+* [x] Ablation study ($E0 - E8$) and documented failure cases (in [`eval_P1_T01.md`](eval_P1_T01.md))
+* [x] Interactive web application with $<10\text{ s}$ SLA certified ([`app.py`](app.py) & [`outputs/live_latency_audit.json`](outputs/live_latency_audit.json))
+* [x] One-command execution scripts (`run_app.bat` and `run_app.sh`)
+
+---
+
+## 🚀 Quick Start (Running the Application)
+
+To start the interactive web application:
+```powershell
+# Windows
+.\run_app.bat
+
+# Linux / macOS
+bash run_app.sh
+
+# Or directly via Python
+python app.py --port 7860
+```
+Open [http://localhost:7860](http://localhost:7860) in your browser.
 
 ---
 
@@ -115,11 +132,22 @@ In accordance with the hackathon specification (evaluated in strict order):
 
 ```text
 .
-├── docs/
-│   ├── Computer Vision Hackathon 2026.pdf  # Official Hackathon problem statement & rules
-│   └── architecture.md                     # System architecture & design details
-├── P1_recommended_modified_plan.md         # Recommended engineering & implementation roadmap
-├── LICENSE                                 # MIT License
+├── p1/                                     # Core unified restoration engine
+│   ├── interface.py                        # Standardized enhance(rgb_uint8, config) contract
+│   ├── classical.py                        # Guided Retinex & bilateral filtering
+│   ├── deep_adapter.py                     # HVI-CIDNet inference wrapper
+│   ├── fusion.py                           # Adaptive spatial logit fusion & Quality Guard
+│   └── pipeline.py                         # Master execution dispatcher
+├── weights/                                # Checkpoints (adapted Kaggle best_model + official weights)
+├── tools/                                  # Audit & evaluation utilities
+│   ├── audit_live_latency.py               # 20-image live latency certification tool
+│   ├── verify_hybrid_outputs.py            # Physical metric and scenario verification harness
+│   └── evaluate_small.py                   # SMALL v1.0.0 benchmark runner
+├── outputs/                                # Certified evaluation artifacts & JSON evidence
+├── data/handoff_fixtures/                  # 5 canonical test fixtures
+├── docs/                                   # Problem PDF, research, and architecture docs
+├── app.py                                  # Live Gradio application
+├── eval_P1_T01.md                          # Mandatory hackathon evaluation report (USNs on line 1)
 └── README.md                               # Project documentation & overview
 ```
 

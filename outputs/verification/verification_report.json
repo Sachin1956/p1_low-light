@@ -1,0 +1,232 @@
+{
+  "handoff_1_dark_indoor": {
+    "metrics": {
+      "raw": {
+        "mean_luma": 0.0823,
+        "std_contrast": 0.0296,
+        "noise_mad": 0.0465,
+        "edge_energy": 0.0447,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 11.86
+      },
+      "classical": {
+        "mean_luma": 0.4151,
+        "std_contrast": 0.1454,
+        "noise_mad": 0.5698,
+        "edge_energy": 0.5553,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.11
+      },
+      "deep": {
+        "mean_luma": 0.5307,
+        "std_contrast": 0.1228,
+        "noise_mad": 0.0814,
+        "edge_energy": 0.1036,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      },
+      "hybrid": {
+        "mean_luma": 0.4563,
+        "std_contrast": 0.104,
+        "noise_mad": 0.2674,
+        "edge_energy": 0.2678,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      },
+      "no_guard": {
+        "mean_luma": 0.4563,
+        "std_contrast": 0.104,
+        "noise_mad": 0.2674,
+        "edge_energy": 0.2678,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      }
+    },
+    "weight_norm_max_err": 0.007843,
+    "composite_image": "outputs\\verification\\handoff_1_dark_indoor_verification_grid.png"
+  },
+  "handoff_2_streetlight": {
+    "metrics": {
+      "raw": {
+        "mean_luma": 0.076,
+        "std_contrast": 0.1384,
+        "noise_mad": 0.0349,
+        "edge_energy": 0.0407,
+        "clipped_pct": 0.42,
+        "underexposed_pct": 55.55
+      },
+      "classical": {
+        "mean_luma": 0.3845,
+        "std_contrast": 0.1798,
+        "noise_mad": 0.5407,
+        "edge_energy": 0.5622,
+        "clipped_pct": 0.42,
+        "underexposed_pct": 0.94
+      },
+      "deep": {
+        "mean_luma": 0.4433,
+        "std_contrast": 0.2213,
+        "noise_mad": 0.0523,
+        "edge_energy": 0.0836,
+        "clipped_pct": 4.12,
+        "underexposed_pct": 0.0
+      },
+      "hybrid": {
+        "mean_luma": 0.3881,
+        "std_contrast": 0.1566,
+        "noise_mad": 0.1977,
+        "edge_energy": 0.2155,
+        "clipped_pct": 0.42,
+        "underexposed_pct": 0.0
+      },
+      "no_guard": {
+        "mean_luma": 0.3885,
+        "std_contrast": 0.1577,
+        "noise_mad": 0.1977,
+        "edge_energy": 0.2156,
+        "clipped_pct": 0.42,
+        "underexposed_pct": 0.0
+      }
+    },
+    "weight_norm_max_err": 0.007843,
+    "composite_image": "outputs\\verification\\handoff_2_streetlight_verification_grid.png"
+  },
+  "handoff_3_color_cast": {
+    "metrics": {
+      "raw": {
+        "mean_luma": 0.1128,
+        "std_contrast": 0.0121,
+        "noise_mad": 0.0291,
+        "edge_energy": 0.0295,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      },
+      "classical": {
+        "mean_luma": 0.3553,
+        "std_contrast": 0.062,
+        "noise_mad": 0.2791,
+        "edge_energy": 0.2648,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      },
+      "deep": {
+        "mean_luma": 0.4117,
+        "std_contrast": 0.0317,
+        "noise_mad": 0.0116,
+        "edge_energy": 0.0188,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      },
+      "hybrid": {
+        "mean_luma": 0.3651,
+        "std_contrast": 0.0348,
+        "noise_mad": 0.1279,
+        "edge_energy": 0.1269,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      },
+      "no_guard": {
+        "mean_luma": 0.3651,
+        "std_contrast": 0.0348,
+        "noise_mad": 0.1279,
+        "edge_energy": 0.1269,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      }
+    },
+    "weight_norm_max_err": 0.007843,
+    "composite_image": "outputs\\verification\\handoff_3_color_cast_verification_grid.png"
+  },
+  "handoff_4_textured_shadow": {
+    "metrics": {
+      "raw": {
+        "mean_luma": 0.0561,
+        "std_contrast": 0.0201,
+        "noise_mad": 0.0581,
+        "edge_energy": 0.063,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 22.68
+      },
+      "classical": {
+        "mean_luma": 0.4161,
+        "std_contrast": 0.2135,
+        "noise_mad": 0.7384,
+        "edge_energy": 0.7857,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.36
+      },
+      "deep": {
+        "mean_luma": 0.4593,
+        "std_contrast": 0.0833,
+        "noise_mad": 0.1454,
+        "edge_energy": 0.2181,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      },
+      "hybrid": {
+        "mean_luma": 0.4207,
+        "std_contrast": 0.1159,
+        "noise_mad": 0.3198,
+        "edge_energy": 0.3743,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      },
+      "no_guard": {
+        "mean_luma": 0.4207,
+        "std_contrast": 0.1159,
+        "noise_mad": 0.3198,
+        "edge_energy": 0.3743,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      }
+    },
+    "weight_norm_max_err": 0.007843,
+    "composite_image": "outputs\\verification\\handoff_4_textured_shadow_verification_grid.png"
+  },
+  "handoff_5_already_bright": {
+    "metrics": {
+      "raw": {
+        "mean_luma": 0.5918,
+        "std_contrast": 0.1489,
+        "noise_mad": 0.0174,
+        "edge_energy": 0.0209,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      },
+      "classical": {
+        "mean_luma": 0.6204,
+        "std_contrast": 0.1379,
+        "noise_mad": 0.0581,
+        "edge_energy": 0.0658,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      },
+      "deep": {
+        "mean_luma": 0.7692,
+        "std_contrast": 0.1881,
+        "noise_mad": 0.0174,
+        "edge_energy": 0.0262,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      },
+      "hybrid": {
+        "mean_luma": 0.6471,
+        "std_contrast": 0.1467,
+        "noise_mad": 0.0407,
+        "edge_energy": 0.0482,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      },
+      "no_guard": {
+        "mean_luma": 0.6471,
+        "std_contrast": 0.1467,
+        "noise_mad": 0.0407,
+        "edge_energy": 0.0482,
+        "clipped_pct": 0.0,
+        "underexposed_pct": 0.0
+      }
+    },
+    "weight_norm_max_err": 0.007843,
+    "composite_image": "outputs\\verification\\handoff_5_already_bright_verification_grid.png"
+  }
+}

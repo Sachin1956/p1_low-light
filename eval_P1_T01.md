@@ -120,3 +120,19 @@
 | **Case 2 — Severe Mixed-Illuminant Scenes** | Simultaneous warm sodium-vapor streetlights (2200K) and cool fluorescent/LED signage (6000K). | Residual warm or cool tint in localized transition zones. | Global and smooth spatial white-balance priors assume slowly varying illumination chromaticity and can under-correct sharp dual-illuminant boundaries. |
 | **Case 3 — Low-Light Motion Blur & Defocus** | Handheld long-exposure capture with camera shake or moving subjects. | Restored brightness reveals motion-blurred edges cleanly without deblurring them. | Retinex decomposition and HVI-CIDNet restore photometric illumination and suppress sensor noise, but do not perform blind motion point-spread-function (PSF) deconvolution. |
 | **Case 4 — Extreme High-ISO Sensor Noise on Fine Foliage/Fabric** | ISO > 12800 capture where chroma/luma noise amplitude matches fine texture gradients. | Trade-off between slight residual grain or mild softening of stochastic micro-textures. | When noise variance overlaps the spatial frequency band of fine stochastic textures, edge-preserving filters face an information-theoretic limit. |
+
+---
+
+## 6. Live Deployment & Latency SLA Release Gate Verification
+Per Section 8 of the P1 Execution Plan and Agent Contract, the live system underwent an automated 20-image stress audit (`tools/audit_live_latency.py`) following 3 warmup cycles across varied dimensions and extreme light/noise conditions:
+
+- **Total Live Inferences**: 20 / 20 successful
+- **Zero Crashes**: **PASS** (0 crashes observed)
+- **Zero OOM Exceptions**: **PASS** (0 memory errors observed)
+- **All Inferences < 10.0 s Target**: **PASS** (100% under SLA threshold)
+- **Minimum Latency**: 2122.5 ms (2.12 s)
+- **Median Latency**: 2996.6 ms (3.00 s)
+- **P95 Latency**: 4719.8 ms (4.72 s)
+- **Maximum Latency**: 4750.6 ms (4.75 s)
+- **Audit Record Artifact**: `outputs/live_latency_audit.json`
+
